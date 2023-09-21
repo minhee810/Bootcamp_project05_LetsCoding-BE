@@ -27,6 +27,8 @@ public class User {
     private  String name;
     private String role;
     private LocalDateTime createDate;
+    @Column(nullable = false)
+    private String stack;
 
     @PrePersist
     public void createDate() {
