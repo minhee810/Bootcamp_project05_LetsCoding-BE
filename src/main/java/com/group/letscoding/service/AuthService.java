@@ -23,4 +23,10 @@ public class AuthService {
         User userEntity = userRepository.save(user);
         return userEntity;
     }
+
+    @Transactional(readOnly = true)
+    public boolean isUsernameDuplicate(String username) {
+        User user = userRepository.findByUsername(username);
+        return user != null;
+    }
 }
