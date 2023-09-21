@@ -7,11 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,24 +31,18 @@ public class PostController {
 
     //0.게시판에 글 나열(페이지 이동에 따른 이동 없음)
     @GetMapping("/post/list")
-    public ModelAndView listRecruit(@RequestParam(name = "page", defaultValue = "0") int page,
-                                    @RequestParam(name = "size", defaultValue = "5") int size){
+    public String redirectToPage(@RequestParam(name = "page", defaultValue = "0") int pageNumber, Model model) {
+        // Define the page size.
+        int size = 5;
 
-        //1. postService의 메소드를 통해
-        // 게시글 목록 받아오기
-        List<StudyPost> recruitBoardList = postService.getRecruitBoardList();
-        List<PostDTO> postDTOList = new ArrayList<>();
+        Page<StudyPost> recruitBoardPage = postService.getRecruitBoardPage(pageNumber, size);
 
-        Page<StudyPost> recruitBoardPage = postService.getRecruitBoardPage(page, size);
+        model.addAttribute("recruitBoardList", recruitBoardPage.getContent());
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", recruitBoardPage.getTotalPages());
 
-        mav.addObject("recruitBoardList", recruitBoardPage.getContent());
-        mav.addObject("currentPage", page);
-        mav.addObject("totalPages", recruitBoardPage.getTotalPages());
-
-        mav.setViewName("post/post-list");
-        return mav;
+        return "post/post-list";
     }
-
 
     // 1. 모집 글 작성 페이지로 이동
     @GetMapping("/study/create-post")

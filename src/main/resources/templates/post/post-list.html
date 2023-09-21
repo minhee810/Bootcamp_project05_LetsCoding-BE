@@ -54,16 +54,27 @@
 </div>
 
 <br />
+
 <div class="d-flex justify-content-center">
     <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="?page=0">Previous</a></li>
+        <li class="page-item" th:class="${currentPage == 0} ? 'disabled' : ''">
+            <a class="page-link" th:href="@{${'/post/list?page=' + (currentPage - 1)}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
         <li th:each="pageNo : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
             th:classappend="${currentPage == pageNo} ? 'active' : ''">
-            <a class="page-link" th:href="@{'/post/list?page=' + pageNo}" th:text="${pageNo + 1}">1</a>
+            <a class="page-link" th:href="@{${'/post/list?page=' + pageNo}}" th:text="${pageNo + 1}">1</a>
         </li>
-        <li class="page-item"><a class="page-link" href="?page=${totalPages - 1}">Next</a></li>
+        <li class="page-item" th:class="${currentPage == totalPages - 1} ? 'disabled' : ''">
+            <a class="page-link" th:href="@{${'/post/list?page=' + (currentPage + 1)}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
     </ul>
 </div>
+
+
 
 <div th:replace="layout/footer"></div>
 
