@@ -1,14 +1,13 @@
 package com.group.letscoding.service;
 
-import com.group.letscoding.domain.group.Group;
-import com.group.letscoding.domain.group.GroupRepository;
-import com.group.letscoding.handler.ex.CustomApiException;
 import com.group.letscoding.domain.StudyGroupMember.GroupMember;
 import com.group.letscoding.domain.StudyGroupMember.GroupMemberRepository;
 import com.group.letscoding.domain.group.Group;
 import com.group.letscoding.domain.group.GroupRepository;
 import com.group.letscoding.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +17,12 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
+
+    @Transactional(readOnly = true)
+    public Page<Group> getGroupList(Long principalId, Pageable pageable) {
+        Page<Group> groups = groupRepository.mGroupList(principalId, pageable);
+        return groups;
+    }
 
     @Transactional
     public Group createGroup(Group groupEntity, User user) {

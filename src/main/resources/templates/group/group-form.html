@@ -24,24 +24,6 @@
   <div class="row">
     <!-- list -->
     <div class="col-sm-8">
-      <div class="scroller">
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>내용</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="review : ${reviews}">
-            <td th:text="${groupMember.userId}"></td>
-            <td th:text="${review.title}"></td>
-            <td th:text="${review.content}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
     <div class="col-sm-4">
       <div>
@@ -49,11 +31,11 @@
         <br/><br/><br/>
         <h2>groupName</h2>
         <br/><br/><br/>
-        <button type="button" class="btn btn-secondary custom-btn" th:onClick="|location.href='@{group/review}'|">회고 작성</button>
+        <a href="/group/reviewWriteForm" class="btn btn-secondary custom-btn" role="button">회고 작성</a>
         <br/>
         <button type="button" class="btn btn-secondary custom-btn">출석</button>
         <br/>
-        <button type="button" class="btn btn-secondary custom-btn" th:onClick="|location.href='@{group/invite}'|">그룹 초대하기</button>
+        <a href="/group/inviteForm" class="btn btn-secondary custom-btn" role="button">그룹 초대하기</a>
       </div>
       <div>
         <button type="button" class="btn btn-secondary custom-btn" th:onClick="|location.href='@{group/detail'|">
