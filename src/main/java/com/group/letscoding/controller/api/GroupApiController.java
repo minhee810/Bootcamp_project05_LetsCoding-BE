@@ -46,7 +46,7 @@ public class GroupApiController {
             }
             throw new CustomValidationApiException("유효성 검사 실패", errorMap);
         } else {
-            Group group = groupService.createGroup(fromDto(groupCreateDto, principalDetails.getUser()));
+            Group group = groupService.createGroup(fromDto(groupCreateDto, principalDetails.getUser()), principalDetails.getUser());
             return new ResponseEntity<>(new CMRespDto<>(1, "스터디 그룹 생성 성공", group), HttpStatus.CREATED);
         }
     }
