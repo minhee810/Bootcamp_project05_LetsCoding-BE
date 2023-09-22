@@ -6,6 +6,9 @@ import com.group.letscoding.service.post.PostServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 @Controller
 public class PostController {
@@ -68,16 +74,64 @@ public class PostController {
         return "member/create-group";
     }
 
-    private List<PostDTO> getPostDTOS(List<PostDTO> postDTOList, List<StudyPost> postList) {
-        for(StudyPost post : postList){
-            PostDTO postDTO = new PostDTO();
-            postDTO.setPost_id(post.getPost_id());
-            postDTO.setTitle(post.getTitle());
-            postDTO.setSkill(post.getSkill());
+    // 5. 스터디 구인 글 검색(title)
+    @GetMapping(value = "/post/title-search?keyword={keyword}")
+    public String StudyRecruitTitleSearch(Model model, @RequestParam String keyword
+            , @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        logger.info("StudyRecruitTitleSearch   START");
+        //1. 검색어를 사용하여 제목 기반 게시글 검색
+        Page<StudyPost> searchResults = postService.findByTitleContaining(keyword,pageable);
 
-            postDTOList.add(postDTO);
-        }
+        logger.info("StudyRecruitTitleSearch   RETURNs");
+        //2.Model 객체에 리스트 담기
+        //2.Model 객체에 리스트 담기
+        // 리다이렉션 시 데이터를 추가.
+        /*
+        model.addAttribute("searchResults",searchResults);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("hasNext", searchResults.hasNext());
+        model.addAttribute("hasPrev", searchResults.hasPrevious());
+        */
 
-        return postDTOList;
+        System.out.println(keyword+""+searchResults);
+        return "/post/post-list";
     }
+
+    // 6.스터디 구인 글 검색(skill)
+    @GetMapping(value = "/post/skill-search?keyword={keyword}")
+    public String StudyRecruitSkillSearch(Model model, @RequestParam String keyword
+            ,@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+
+        //1. 검색어를 사용하여 skill 기반 게시글 검색
+        Page<StudyPost> searchResults = postService.findBySkillContaining(keyword,pageable);
+
+        //2.Model 객체에 리스트 담기
+        // 리다이렉션 시 데이터를 추가.
+        model.addAttribute("searchResults",searchResults);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("hasNext", searchResults.hasNext());
+        model.addAttribute("hasPrev", searchResults.hasPrevious());
+
+        return "/post/post-list";
+    }
+
+
+//    //convert StudyPost -> PostDTO
+//    private Page<PostDTO> getPageDTOs(Page<PostDTO> postDTOList, Page<StudyPost> postList) {
+//        for(StudyPost post : postList){
+//            PostDTO postDTO = new PostDTO();
+//            postDTO.setPost_id(post.getPost_id());
+//            postDTO.setTitle(post.getTitle());
+//            postDTO.setSkill(post.getSkill());
+//
+//            postDTOList.add(postDTO);
+//        }
+//
+//        return postDTOList;
+//    }
+
 }

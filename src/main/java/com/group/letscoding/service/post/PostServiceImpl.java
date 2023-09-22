@@ -1,9 +1,12 @@
 package com.group.letscoding.service.post;
 
+import com.group.letscoding.controller.PostController;
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.domain.studypost.StudyPostRepository;
 import com.group.letscoding.dto.post.PostDTO;
 import com.group.letscoding.dto.post.PostInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,8 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
 
     private final StudyPostRepository studyPostRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     public PostServiceImpl(StudyPostRepository studyPostRepository) {
         this.studyPostRepository = studyPostRepository;
@@ -60,10 +65,19 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<StudyPost> findByTitleContaining(String keyword) {
+    public Page<StudyPost> findByTitleContaining(String keyword,Pageable pageable) {
+        logger.info("START");
+        Page<StudyPost> postList;
+       postList = studyPostRepository.findByTitleContaining(keyword,pageable);
+        logger.info("END");
+        return postList;
+    }
 
-        List<StudyPost> postList;
-        postList = studyPostRepository.findByTitleContaining(keyword);
+    @Override
+    public Page<StudyPost> findBySkillContaining(String keyword,Pageable pageable) {
+
+        Page<StudyPost> postList;
+        postList = studyPostRepository.findBySkillContaining(keyword,pageable);
 
         return postList;
     }

@@ -4,6 +4,7 @@ import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.dto.post.PostDTO;
 import com.group.letscoding.dto.post.PostInterface;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,8 @@ interface PostService {
     public Page<StudyPost> getRecruitBoardPage(int page, int size);
 
     //검색
-    List<StudyPost> findByTitleContaining(String keyword);
+    public Page<StudyPost> findByTitleContaining(String keyword, Pageable pageable);
+    public Page<StudyPost> findBySkillContaining(String keyword, Pageable pageable);
 
 
 }
