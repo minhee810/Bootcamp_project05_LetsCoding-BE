@@ -12,11 +12,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +34,13 @@ import java.util.Map;
 public class GroupApiController {
 
     private final GroupService groupService;
+
+    @GetMapping("/api/study-group/list")
+    public ResponseEntity<?> getGroupList(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                          @PageableDefault(size = 3) Pageable pageable) {
+        Page<Group> groups = groupService.getGroupList(principalDetails.getUser().getId(), pageable);
+        return new ResponseEntity<>(new CMRespDto<>(1, "성공", groups), HttpStatus.OK);
+    }
 
     @ApiOperation(value = "스터디 그룹 생성", notes = "새로운 스터디 그룹을 생성합니다.")
     @ApiResponses({
