@@ -19,7 +19,7 @@ public class StudyPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int post_id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -30,7 +30,6 @@ public class StudyPost {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user_id;

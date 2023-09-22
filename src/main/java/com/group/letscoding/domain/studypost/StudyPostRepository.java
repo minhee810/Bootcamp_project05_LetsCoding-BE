@@ -9,28 +9,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface StudyPostRepository extends JpaRepository<StudyPost,Integer> {
+public interface StudyPostRepository extends JpaRepository<StudyPost, Long> {
 
     List<StudyPost> findAllBy();
 
-//    //1. 게시물 리스트의 title 뽑아오기
-//    @Query("SELECT s.title FROM StudyPost s")
-//    List<String> findAllTitles();
-//
-//    // 2. StudyPost의 title 칼럼을 파라미터로 입력 받아 post_id를 선택하는 쿼리 메소드
-//    @Query("SELECT s.post_id FROM StudyPost s WHERE s.title = :title")
-//    Integer findStackIdByStudyPostTitle(@Param("title") String title);
-//
-//    // 3. post_id를 기반으로 stack 엔티티에서 stack을 가져오는 쿼리 메소드
-//    @Query("SELECT s.stack_name FROM Stack s WHERE s.post_id = :post_id")
-//    List<String> findByPostId(int post_id);
-
     //keyword 기반 제목 검색
-    @Query("SELECT s.post_id,s.title,s.skills FROM StudyPost s WHERE s.title LIKE:keyword")
+    @Query("SELECT s.id,s.title,s.skills FROM StudyPost s WHERE s.title LIKE:keyword")
     Page<StudyPost> findByTitleContaining(@Param("keyword")String keyword, Pageable pageable);
 
     //keyword 기반 skill 검색
-    @Query("SELECT s.post_id,s.title,s.skills FROM StudyPost s WHERE s.content LIKE:keyword")
+    @Query("SELECT s.id,s.title,s.skills FROM StudyPost s WHERE s.content LIKE:keyword")
     Page<StudyPost> findBySkillContaining(@Param("keyword")String keyword, Pageable pageable);
 
 }

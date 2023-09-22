@@ -1,6 +1,6 @@
 package com.group.letscoding.dto.post;
 
-import com.group.letscoding.domain.post.StudyPost;
+import com.group.letscoding.domain.studypost.StudyPost;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class PostUpdateDto {
 
-    private int id;
+    private Long id;
 
     @NotBlank
     private String title;

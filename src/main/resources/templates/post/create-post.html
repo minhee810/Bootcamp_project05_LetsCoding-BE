@@ -40,17 +40,24 @@
 
         $.ajax({
             type: 'POST',
-            url: '/api/study/create-studyPost',
+            url: '/api/study/create-post',
             data: JSON.stringify(postData),  // json 문자열로 변환
             contentType: 'application/json',
-            success: function (response) {
-                console.log(response);
-                location.href = "/study/study-recruitment/" + response.id // 글 작성 완료 후 모집글 상세보기 페이지로 이동
+            success: function (postData) {
+                console.log("response");
+                console.log("asldkfjsggoaksdlkfjdnzlkjfnfSDjknfdjxcv,nsl");
+
+                // location.href = "/api/study/study-recruitment/" + response.data.id // 글 작성 완료 후 모집글 상세보기 페이지로 이동
+                //   location.href="/study/study-recruitment/"
+                // + postData.data.id;
             },
+
             error: function (error) {
                 console.log(error);
             }
+
         });
+
     }
 </script>
 <head>
@@ -88,8 +95,6 @@
             <input type="text" name="skills" class="form-control" placeholder="제목을 입력해주세요." id="skills" >
         </div>
 
-
-
         <div class="form-group" style="width: 400px;">
             <label for="start_date"> 시작 예정일 </label>
             <input type="date" id="start_date" name="start_date" class="form-control" >
@@ -116,10 +121,10 @@
 
         <input type="text" name="content" class="form-control" placeholder="제목을 입력해주세요." id="content" >
         <!--summer note-->
-<!--       <div id="summernote" name="content" class="container"></div>-->
+        <!--       <div id="summernote" name="content" class="container"></div>-->
         <div class="button-group">
             <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
-            <button type="button" class="btn btn-primary" onclick="submitForm()">작성</button>
+            <button type="button" class="btn btn-primary" th:href="@{/study/study-recruitment/{recruitmentId}(id=${postResponseDto.recruitmentId})}" >작성</button>
             <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
         </div>
         <br/>

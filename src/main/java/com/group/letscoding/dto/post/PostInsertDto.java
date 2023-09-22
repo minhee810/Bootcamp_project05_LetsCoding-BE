@@ -3,25 +3,19 @@ package com.group.letscoding.dto.post;
 import com.group.letscoding.domain.studypost.StudyPost;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
-
 @Data
-public class PostDto {
+public class PostInsertDto {
 
-    @NotBlank
-    private String title;
-
-    @NotBlank
+    private String title ;
     private String topic;
-
-    @NotBlank
-    private String content;
-
     private String skills;
+    private String content;
+    private int max_num;
     private Date start_date;
     private Date end_date;
-    private int max_num;
+    private Long user_id;
+
 
     public StudyPost toEntity() {
         return StudyPost.builder()
@@ -29,11 +23,9 @@ public class PostDto {
                 .topic(topic)
                 .content(content)
                 .max_num(max_num)
+                .skills(skills)
                 .start_date(start_date)
                 .end_date(end_date)
                 .build();
     }
-
 }
-
-

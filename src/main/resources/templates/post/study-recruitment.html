@@ -1,10 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>모집글 상세보기 페이지</title>
-</head>
-<body>
-<h1>모집글 상세보기 페이지</h1>
-</body>
-</html>
+<div th:replace="layout/header"></div>
+
+<title>모집글 상세보기 페이지</title>
+
+<script>
+
+    function goBack() {
+        window.history.back();
+    }
+
+    /*    // 페이지 로드 시 실행
+        $(document).ready(function () {
+            // AJAX 요청을 통해 REST API 로부터 데이터 가져오기
+
+            var recruitmentId = $("#someElement").data("recruitmentId");
+
+            $.ajax({
+
+                url: "/api/study/study-recruitment/ ", // API End Point
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    // API로 부터 받은 데이터를 화면에 표시
+                    $('#title').text(data.title);
+                    $('#topic').text(data.topic);
+                    $('#skills').text(data.skills);
+                    $('#start_date').text(data.start_date);
+                    $('#end_date').text(data.end_date);
+                    $('#max_num').text(data.max_num);
+                    $('#content').text(data.content);
+                },
+                error: function () {
+                    $('#detailContent').text("값을 불러오지 못했습니다. 미안~");
+                }
+            });
+        });*/
+
+</script>
+<div id="detailContent" class="container">
+    <div>
+        제목 : <span id = "title" th:text="${post.title}"></span>
+    </div>
+    <div >
+        주제: <span id="topic" th:text="${post.topic}"></span>
+    </div>
+    <div >
+        기술 스택 :  <span id="skills" th:text="${post.skills}"></span>
+    </div>
+    <div>
+        시작일 :  <span id="start_date" th:text="${post.start_date}"></span>
+    </div>
+    <div>
+        종료일 :  <span id="end_date" th:text="${post.end_date}"></span>
+    </div>
+    <div>
+        모집 인원 :  <span id="max_num" th:text="${post.max_num}"></span>
+    </div>
+    <div>
+        모집 내용 :  <span id="content" th:text="${post.content}"></span>
+    </div>
+
+    <br/>
+
+    <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
+    <div class="button-group">
+        <button type="button" class="btn btn-light" onclick="goBack()">뒤로 가기</button>
+    </div>
+
+</div>
+<div th:replace="layout/footer"></div>

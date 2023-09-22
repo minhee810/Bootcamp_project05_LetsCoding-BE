@@ -21,10 +21,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     private static final ModelAndView mav = new ModelAndView();
-
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
-
-
     public PostController(PostServiceImpl postService) {
         this.postService = postService;
     }

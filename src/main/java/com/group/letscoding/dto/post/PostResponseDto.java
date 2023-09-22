@@ -1,6 +1,6 @@
 package com.group.letscoding.dto.post;
 
-import com.group.letscoding.domain.post.StudyPost;
+import com.group.letscoding.domain.studypost.StudyPost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 public class PostResponseDto {
 
-    private int id;
+    private Long id;
 
     @NotBlank
     private String title;
