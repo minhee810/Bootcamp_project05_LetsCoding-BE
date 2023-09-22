@@ -41,13 +41,13 @@
         </div>
         <br>
         <div class="card m-2" style="width: 60%;" th:if="${!recruitBoardList.isEmpty()}">
-            <div class="card-body" th:each="post : ${recruitBoardList}">
-                <h4 class="card-title" th:text="${post.getTitle()}">제목이 없습니다.</h4>
+            <div class="card-body" th:each="studyPost : ${recruitBoardList}">
+                <h4 class="card-title" th:text="${studyPost.getTitle()}">제목이 없습니다.</h4>
                 <p class="card-text">
                     기술 스택 :
-                    <span th:each="skill : ${post.getSkill()}" th:text="${skill}">기술 스택 정보가 없습니다.</span>
+                    <span th:each="skill : ${studyPost.getSkill()}" th:text="${skill}">기술 스택 정보가 없습니다.</span>
                 </p>
-                <a th:href="@{'/board/' + ${post.getPost_id()}}" class="btn btn-primary">상세보기</a>
+                <a th:href="@{'/board/' + ${studyPost.getPost_id()}}" class="btn btn-primary">상세보기</a>
             </div>
         </div>
     </div>
@@ -58,16 +58,16 @@
 <div class="d-flex justify-content-center">
     <ul class="pagination">
         <li class="page-item" th:class="${currentPage == 0} ? 'disabled' : ''">
-            <a class="page-link" th:href="@{${'/post/list?page=' + (currentPage - 1)}}" aria-label="Previous">
+            <a class="page-link" th:href="@{${'/studyPost/list?page=' + (currentPage - 1)}}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li th:each="pageNo : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
             th:classappend="${currentPage == pageNo} ? 'active' : ''">
-            <a class="page-link" th:href="@{${'/post/list?page=' + pageNo}}" th:text="${pageNo + 1}">1</a>
+            <a class="page-link" th:href="@{${'/studyPost/list?page=' + pageNo}}" th:text="${pageNo + 1}">1</a>
         </li>
         <li class="page-item" th:class="${currentPage == totalPages - 1} ? 'disabled' : ''">
-            <a class="page-link" th:href="@{${'/post/list?page=' + (currentPage + 1)}}" aria-label="Next">
+            <a class="page-link" th:href="@{${'/studyPost/list?page=' + (currentPage + 1)}}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
@@ -104,9 +104,9 @@
             // Ajax 요청 URL 설정
             let ajaxUrl = "";
             if (searchOption === "title") {
-                ajaxUrl = "/post/title-search";
+                ajaxUrl = "/studyPost/title-search";
             } else {
-                ajaxUrl = "/post/skill-search";
+                ajaxUrl = "/studyPost/skill-search";
             }
 
             alert("EventListener : " +  ajaxUrl);

@@ -1,25 +1,25 @@
-package com.group.letscoding.domain.studypost;
+package com.group.letscoding.domain.post;
 
 import com.group.letscoding.domain.user.User;
-import com.group.letscoding.dto.post.PostInterface;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
-@Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 public class StudyPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int post_id;
+    private int id;
 
     @Column(nullable = false)
     private String title;
@@ -27,13 +27,14 @@ public class StudyPost {
     @Column
     private String topic;
 
-    @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @ManyToOne
-    private User user_id;
+    private User user;
+
+    @Column
+    private String skills;
 
     @Column(nullable = false)
     private int max_num;
@@ -44,11 +45,7 @@ public class StudyPost {
     @Column
     private Date end_date;
 
-    @Column(nullable = false)
     private LocalDateTime createDate;
-
-    @Column(nullable = false)
-    private String skills;
 
     @PrePersist
     public void createDate() {

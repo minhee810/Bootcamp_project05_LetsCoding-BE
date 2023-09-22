@@ -1,7 +1,6 @@
 package com.group.letscoding.controller;
 
 import com.group.letscoding.domain.studypost.StudyPost;
-import com.group.letscoding.dto.post.PostDTO;
 import com.group.letscoding.service.post.PostServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,16 +11,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
 
-@Controller
+@Controller                     // * 페이지 이동 컨트롤러
 public class PostController {
 
     private final PostServiceImpl postService;
@@ -58,7 +52,7 @@ public class PostController {
 
     // 2. 모집 글 상세보기 페이지로 이동
     @GetMapping("/study/study-recruitment/{recruitmentId}")
-    public String recruitment (){
+    public String recruitment(){
         return "post/study-recruitment";
     }
 

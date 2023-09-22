@@ -17,6 +17,7 @@ spring:
     username: dev
     password: 1234
 
+<<<<<<< HEAD
   jpa:
     open-in-view: true
     hibernate:
@@ -24,6 +25,16 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+=======
+jpa:
+  open-in-view: true
+  hibernate:
+    ddl-auto: create
+    naming:
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    format_sql: true
+  show-sql: true
+>>>>>>> 8880bc977ba99bac741ad07c5561bd88b9552c67
 
   security:
     user:
