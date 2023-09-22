@@ -26,10 +26,13 @@ public class PrincipalDetails implements UserDetails {
         return null;
     }
 
+<<<<<<< HEAD
     public User getUser() {
         return user;
     }
 
+=======
+>>>>>>> c4fc5dfe42d9d6dfaa96c68fcbb04aa4a546e6f4
     @Override
     public String getPassword() {
         return user.getPassword();

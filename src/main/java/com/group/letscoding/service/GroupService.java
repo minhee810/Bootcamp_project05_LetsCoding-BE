@@ -3,6 +3,11 @@ package com.group.letscoding.service;
 import com.group.letscoding.domain.group.Group;
 import com.group.letscoding.domain.group.GroupRepository;
 import com.group.letscoding.handler.ex.CustomApiException;
+import com.group.letscoding.domain.StudyGroupMember.GroupMember;
+import com.group.letscoding.domain.StudyGroupMember.GroupMemberRepository;
+import com.group.letscoding.domain.group.Group;
+import com.group.letscoding.domain.group.GroupRepository;
+import com.group.letscoding.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class GroupService {
 
     private final GroupRepository groupRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
     @Transactional
-    public Group createGroup(Group group) {
-        try {
-            return groupRepository.save(group);
-        } catch (Exception e) {
-            throw new CustomApiException(e.getMessage());
-        }
+    public Group createGroup(Group groupEntity, User user) {
+        Group group = groupRepository.save(groupEntity);
+        GroupMember groupMember = new GroupMember();
+        groupMember.setUser(user);
+        groupMember.setGroup(group);
+        groupMemberRepository.save(groupMember);
+
+        return group;
     }
 }

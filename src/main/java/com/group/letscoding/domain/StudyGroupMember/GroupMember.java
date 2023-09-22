@@ -1,36 +1,40 @@
-package com.group.letscoding.domain.group;
+package com.group.letscoding.domain.StudyGroupMember;
 
+import com.group.letscoding.domain.group.Group;
 import com.group.letscoding.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "study_group")
-public class Group {
+@Table(
+        name = "group_member",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "group_member_uk",
+                        columnNames = {"user_id", "group_id"}
+                )
+        }
+)
+public class GroupMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String groupName;
-    private String topic;
-    private String introduction;
-    private String skills;
-    private int capacity;
-    private LocalDate startDate;
-    private LocalDate endDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User leader;
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     private LocalDateTime createDate;
 
