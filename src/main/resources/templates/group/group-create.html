@@ -1,0 +1,41 @@
+<div th:replace="layout/header"></div>
+
+<div class="container">
+    <h1 class="text-center mb-5">Create a Study Group!!</h1>
+    <form id="createGroupForm" class="mx-auto" style="max-width: 400px;">
+        <div class="form-group">
+            <label for="topic">주제:</label>
+            <input type="text" id="topic" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="groupName">그룹 이름:</label>
+            <input type="text" id="groupName" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="introduction">스터디 소개:</label>
+            <textarea id="introduction" class="form-control" style="height: 100px;" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="skills">기술스택:</label>
+            <input type="text" id="skills" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="capacity">정원:</label>
+            <input type="number" id="capacity" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" class="form-control" required>
+        </div>
+        <div class="text-right">
+            <button onclick="createStudyGroup()" class="btn btn-primary">Create Group</button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/group.js"></script>
+<div th:replace="layout/footer"></div>
