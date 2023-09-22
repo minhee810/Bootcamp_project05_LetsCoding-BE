@@ -1,0 +1,94 @@
+<div th:replace="layout/header"></div>
+
+<script>
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            placeholder: '내용을 작성하세요',
+            height: 400,
+            maxHeight: 400
+        });
+    });
+
+    function cancelWrite() {
+        // 현재 페이지에서 이전 페이지로 돌아가는 동작
+        window.history.back();
+    }
+
+    function resetForm() {
+        // 폼의 모든 입력 내용을 초기화
+        document.querySelector("form").reset();
+    }
+</script>
+<head>
+    <title>스터디 모집 글 작성</title>
+
+    <!--  jQuery, bootstrap -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <!-- summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+</head>
+<style>
+    .button-group {
+        display: flex;
+        justify-content: flex-end; /* 버튼들을 왼쪽으로 정렬 */
+        gap: 10px; /* 버튼 사이의 간격 */
+    }
+</style>
+
+<body>
+
+
+<div class="container text">
+
+    <form action="#" method="#" style="width: 900px;" class="mx-auto">
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="username" class="form-control" placeholder="제목을 입력해주세요." id="title">
+        </div>
+
+        <div class="form-group">
+            <label for="topic">주제</label>
+            <input type="text" name="username" class="form-control" placeholder="제목을 입력해주세요." id="topic">
+        </div>
+
+        <div class="form-group">
+            <label for="start_date"> 시작 예정일 </label>
+            <input type="date" id="start_date" name="postDate" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="end_date"> 종료 예정일 </label>
+            <input type="date" id="end_date" name="postDate" class="form-control">
+        </div>
+        <label for="maxNum"> 모집 인원 </label>
+        <select id="maxNum" name="maxNum">
+            <option value="1">1명</option>
+            <option value="2">2명</option>
+            <option value="3">3명</option>
+            <option value="4">4명</option>
+            <option value="5">5명</option>
+            <option value="6">6명</option>
+            <option value="7">7명</option>
+            <option value="8">8명</option>
+            <option value="9">9명</option>
+            <option value="10">10명</option>
+        </select>
+        <hr/>
+        <!--summer note-->
+        <div id="summernote" class="container"></div>
+        <div class="button-group">
+            <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
+            <button type="button" class="btn btn-primary">작성</button>
+            <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
+        </div>
+        <br/>
+    </form>
+</div>
+</body>
+
+<div th:replace="layout/footer"></div>
