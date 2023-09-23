@@ -1,0 +1,12 @@
+<div th:replace="layout/header"></div>
+
+<div class="container text-center">
+    <form action="/changeInfo" method="post" style="width: 300px;" class="mx-auto">
+        <div class="form-group">
+            <label for="name">Name</label> <input type="text" name="name" required="required" class="form-control" placeholder="Enter name" id="name">
+        </div>
+        <button id="btn-save" class="btn btn-primary">수정</button>
+    </form>
+</div>
+
+<div th:replace="layout/footer"></div>
