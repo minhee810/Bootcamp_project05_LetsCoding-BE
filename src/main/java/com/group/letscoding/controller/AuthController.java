@@ -25,7 +25,7 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
 
-    @GetMapping("/auth/loginForm")
+    @GetMapping(value = {"/auth/loginForm"})
     public String loginForm() {
         return "user/login-form";
     }
