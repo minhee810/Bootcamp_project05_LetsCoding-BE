@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -32,4 +34,7 @@ public class User {
     public void createDate() {
         this.createDate = LocalDateTime.now();
     }
+
+//    @ManyToMany(mappedBy = "users")
+//    private Set<ChatRoom> chatRooms = new HashSet<>();
 }
