@@ -1,13 +1,29 @@
 package com.group.letscoding.controller.api;
 
 
+import com.group.letscoding.config.auth.PrincipalDetails;
 import com.group.letscoding.controller.AuthController;
+import com.group.letscoding.domain.studypostcomment.StudyPostComment;
+import com.group.letscoding.dto.CMRespDto;
+import com.group.letscoding.dto.post.CommentSaveRequestDto;
+import com.group.letscoding.handler.ex.CustomValidationApiException;
 import com.group.letscoding.service.post.PostServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class PostApiController {
@@ -21,6 +37,32 @@ public class PostApiController {
     public PostApiController(PostServiceImpl postService) {
         this.postService = postService;
     }
+
+
+    @PostMapping("/api/studyPost/{studyPostId}/studyPostcomment")
+    public ResponseEntity commentSave (@Valid @RequestBody CommentSaveRequestDto commentSaveRequestDto,
+                                       BindingResult bindingResult,
+                                       @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            throw new CustomValidationApiException("유효성 검사 실패함", errorMap);
+        }
+
+        StudyPostComment comment = postService.writeComment(
+                commentSaveRequestDto.getContent(),
+                commentSaveRequestDto.getStudyPostId(),
+                commentSaveRequestDto.getUserId(),
+                principalDetails.getUser().getId());
+
+        // postService.writeComment(commentSaveRequestDto);
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 작성 성공", comment), HttpStatus.CREATED);
+    }
+
 
 //    @PostMapping("/api/study/create-post")  // 사용자 정보 받아옴.
 //    public ResponseEntity<?> createPost(@RequestBody PostDto postDto,

@@ -3,6 +3,8 @@ package com.group.letscoding.service.post;
 
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.domain.studypost.StudyPostRepository;
+import com.group.letscoding.domain.studypostcomment.StudyPostComment;
+import com.group.letscoding.domain.studypostcomment.StudyPostCommentRepository;
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.domain.user.UserRepository;
 import com.group.letscoding.dto.post.PostResponseDto;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private final StudyPostRepository studyPostRepository;
+
+    @Autowired
+    private StudyPostCommentRepository studyPostCommentRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
@@ -124,6 +130,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostResponseDto deletePost(int id) throws Exception {
+        return null;
+    }
+
+    @Override
     public PostResponseDto getPostById(int recruitmentId) {
         System.out.println("#### PostServiceImpl getPostById() #### : " + recruitmentId);
 
@@ -147,10 +158,25 @@ public class PostServiceImpl implements PostService {
         return postResponseDto;
     }
 
+    @Transactional
+    public StudyPostComment writeComment(String content, int studyPostId, Long userId, Long id) {
 
 
-    @Override
-    public PostResponseDto deletePost(int id) throws Exception {
-        return null;
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            return new IllegalArgumentException("댓글 쓰기 실패 : User id를 찾을 수 없습니다. ");
+        });
+
+        StudyPost studyPost = studyPostRepository.findById(studyPostId).orElseThrow(() -> {
+            return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다. ");
+        });
+
+        StudyPostComment comment = new StudyPostComment();
+        comment.setContent(content);
+        comment.setUser(user);
+        comment.setStudyPost(studyPost);
+
+        return studyPostCommentRepository.save(comment);
+
     }
+
 }

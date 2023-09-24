@@ -1,17 +1,35 @@
 package com.group.letscoding.domain.studypostcomment;
 
-import javax.persistence.*;
-import java.util.Date;
+import com.group.letscoding.domain.studypost.StudyPost;
+import com.group.letscoding.domain.user.User;
+import com.group.letscoding.dto.post.CommentSaveRequestDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StudyPostComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 200)
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name="userId")
+    private User user;
 
     @Column(nullable = false)
     private int post_id;
@@ -19,6 +37,11 @@ public class StudyPostComment {
     @Column(nullable = false)
     private int user_id;
 
-    @Column(nullable = false)
-    private Date createDate;
+    @CreationTimestamp
+    private LocalDateTime createDate;
+
+    @ManyToOne
+    @JoinColumn(name="studyPostId")
+    private StudyPost studyPost;
+
 }
