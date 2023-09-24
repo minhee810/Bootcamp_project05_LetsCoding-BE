@@ -50,25 +50,28 @@ public class ReviewController {
 
         return "group/review-list";
     }
+
     @GetMapping("/review")
     public String reviewForm(){
         return "group/review-form";
     }
 
-    /*@GetMapping("/group/{groupId}/list")
-    public String reviewList(@PathVariable Integer groupId, Model model, Principal principal,
-                             @PageableDefault(size = 10) Pageable pageable){
+    @GetMapping("/review/{id}/read/{review_id}")
+    public String reviewRead(@PathVariable Integer id,
+                             @PathVariable Integer review_id, Model model){
 
-        PrincipalDetails principalDetails = (PrincipalDetails) ((Authentication) principal).getPrincipal();
-        User user = principalDetails.getUser();
+        Review reviewContent = reviewService.reviewRead(id, review_id);
+        Review review = reviewRepository.findById(review_id).orElse(null);
 
-        Page<ReviewWithUserName> reviewsWithUserName = reviewService.getReviewsWithUserNameByGroupId(groupId, pageable);
-        model.addAttribute("reviewsWithUserName", reviewsWithUserName);
+        if(review == null) {
+            throw new NullPointerException("해당 회고 글이 존재하지 않습니다.");
+        }
 
-        // 해당 그룹의 전체 리뷰 수를 가져 옴 (페이징)
-        Long totalItems = reviewService.getTotalReviewCountByGroupId(groupId);
-        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("reviewContent", reviewContent);
+        model.addAttribute("review", review);
+        System.out.println(model.addAttribute("reviewContent", reviewContent));
+        System.out.println(model.addAttribute("review", review));
 
-        return "reviews-list";
-    }*/
+        return "group/review-read";
+    }
 }

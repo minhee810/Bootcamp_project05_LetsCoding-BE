@@ -21,7 +21,7 @@ public class ReviewWriteDto {
     @NotBlank
     private String content;
 
-    private Integer id;
+    private int id;
 
     public ReviewWriteDto(Integer review_id, String title, String content) {
         this.review_id = review_id;

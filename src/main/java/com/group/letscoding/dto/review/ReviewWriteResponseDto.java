@@ -1,13 +1,15 @@
 package com.group.letscoding.dto.review;
 
+import lombok.Data;
 
+@Data
 public class ReviewWriteResponseDto {
-    private String userName;
+    private int review_id;
     private String title;
     private String content;
 
-    public ReviewWriteResponseDto(String userName, String title, String content) {
-        this.userName = userName;
+    public ReviewWriteResponseDto(int review_id, String title, String content) {
+        this.review_id = review_id;
         this.title = title;
         this.content = content;
     }

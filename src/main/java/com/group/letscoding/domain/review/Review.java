@@ -29,10 +29,5 @@ public class Review {
     @ToString.Exclude
     private Group group;
 
-    /*@ManyToOne
-    @JoinColumn(name = "studyGroup_id")
-    @ToString.Exclude
-    private StudyGroup studyGroup;*/
-
     private LocalDateTime createdDate;
 }

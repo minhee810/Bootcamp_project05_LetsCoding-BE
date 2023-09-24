@@ -5,102 +5,60 @@
     <title>회고 목록</title>
 </head>
 
+<style>
+    div.scroller {
+        height: 500px;
+        overflow-y: scroll;
+        scrollbar-color: pink lightblue;
+        margin-left: 20px;
+    }
+    .col-num1 {
+        width: 15%;
+    }
+    .col-num2 {
+        width: 35%;
+    }
+    .col-num3 {
+        width: 50%;
+    }
+</style>
 <script>
-    $(document).ready(function() {
-        // 전체 아이템 수와 페이지당 아이템 수 설정
-        var totalItems = getTotalReviewCountByGroupId(id); /* 전체 아이템 수 */
-        ;
-        var itemsPerPage = 10;
-        var totalPages = Math.ceil(totalItems / itemsPerPage);
-
-        // 최대로 보여줄 페이지 수 설정
-        var maxPagesToShow = 5;
-
-        // 현재 페이지 번호와 이전/다음 페이지 설정
-        var currentPage = 1;
-        var prevPage = currentPage - 1;
-        var nextPage = currentPage + 1;
-
-        // 페이지네이션 생성
-        var paginationHTML = '';
-        paginationHTML += '<li class="page-item"><a class="page-link" href="#" data-page="prev">Previous</a></li>';
-        for (var i = 1; i <= totalPages; i++) {
-            paginationHTML += '<li class="page-item"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
+    function cancelWrite() {
+        // 현재 페이지에서 이전 페이지로 돌아가는 동작
+        window.history.back();
+    }
+    // 보이는 글자수 제한
+    function limitText(element, limit) {
+        if (element.value.length > limit) {
+            element.value = element.value.substring(0, limit);
         }
-        paginationHTML += '<li class="page-item"><a class="page-link" href="#" data-page="next">Next</a></li>';
-
-        // 페이지네이션을 표시할 요소에 추가
-        $('#pagination').html(paginationHTML);
-
-        // 페이지 클릭 이벤트 핸들러
-        $('#pagination').on('click', 'a.page-link', function (e) {
-            e.preventDefault();
-            var targetPage = $(this).data('page');
-
-            if (targetPage === 'prev' && currentPage > 1) {
-                currentPage = prevPage;
-            } else if (targetPage === 'next' && currentPage < totalPages) {
-                currentPage = nextPage;
-            } else if (!isNaN(targetPage)) {
-                currentPage = targetPage;
-            }
-
-            // 페이지에 따라 리뷰 로딩 등의 로직을 수행
-            loadReviewsForPage(currentPage);
-        });
-
-        // 페이지에 따라 리뷰를 로딩하는 함수
-        function loadReviewsForPage(page) {
-            $.ajax({
-                url: '/group/' + ${id} +'/list?page=' + page, // 해당 그룹의 페이지를 불러오는 엔드포인트로 수정해야 합니다.
-                type: 'GET',
-                success: function (data) {
-                    // data는 서버에서 반환한 페이지의 리뷰 데이터입니다.
-                    // 여기에서 리뷰를 동적으로 업데이트하거나 렌더링하는 로직을 구현합니다.
-                    $('#reviewsTable tbody').empty(); // 기존 내용을 모두 지우고 시작
-                    if (Array.isArray(data)) {
-                        data.forEach(function (review) {
-                            var row = '<tr>';
-                            row += '<td>' + review.userName + '</td>';
-                            row += '<td>' + review.title + '</td>';
-                            row += '<td>' + review.content + '</td>';
-                            row += '</tr>';
-                            $('#reviewsTable tbody').append(row);
-                        });
-                    }
-                }
-            });
-        }
-    })
+    }
 </script>
 <body>
-<div class="container">
-    <table id="reviewsTable" class="table table-hover">
-        <thead>
-        <tr>
-            <th>작성자</th>
-            <th>제목</th>
-            <th>내용</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="review : ${reviews.content}">
-            <td th:text="${review.userName}"></td>
-            <td th:text="${review.title}"></td>
-            <td th:text="${review.content}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <a th:href="@{/review/{id}/write(id=${id})}" class="btn btn-primary" role="button">회고 작성</a>
+<div class="container-fluid">
+    <div class="scroller">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>제목</th>
+                <th>내용</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review : ${reviews}">
+                <td><a th:href="@{'/review/' + ${id} + '/read/' + ${review.review_id}}">
+                    <span class="col-num2" th:text="${review.title}"></span>
+                </a></td>
+                <td class="col-num3" oninput="limitText(this, 10)" th:text="${review.content}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col-md-3">
+            <a th:href="@{/review/{id}/write(id=${id})}" class="btn btn-primary" role="button">회고 작성</a>
+        </div>
+    </div>
 </div>
-<ul id="pagination" class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">4</a></li>
-    <li class="page-item"><a class="page-link" href="#">5</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-</ul>
 </body>
 </html>

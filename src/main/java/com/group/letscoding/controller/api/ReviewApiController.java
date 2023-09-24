@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class ReviewApiController {
 
@@ -18,28 +21,44 @@ public class ReviewApiController {
     }
 
     @PostMapping("/api/group/{id}/write")
-    public ResponseEntity reviewWrite(
+    public ResponseEntity<?> reviewWrite(
             @PathVariable("id") Integer id,
-            @RequestParam("title") String title,
-            @RequestParam("content") String content
+            @RequestBody ReviewWriteDto reviewWriteDto
     ){
-        ReviewWriteDto reviewWriteDto = new ReviewWriteDto();
-        reviewWriteDto.setTitle(title);
-        reviewWriteDto.setContent(content);
-        reviewWriteDto.setId(id);
-
-        ReviewWriteDto savedReview = reviewService.reviewWrite(reviewWriteDto);
-        System.out.println(title);
-        System.out.println(content);
-        return ResponseEntity.status(HttpStatus.OK).body(savedReview);
+        try {
+            // 성공적으로 처리된 경우
+            reviewService.saveReview(reviewWriteDto);
+            return ResponseEntity.ok("Success");
+        } catch (Exception e) {
+            // 오류가 발생한 경우
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
     }
 
-    /*@PostMapping("/write")
-    public ResponseEntity reviewWrite(@RequestBody ReviewWriteDto reviewWriteDto){
-        ReviewWriteDto reviewWriteDto1 = reviewService.reviewWrite(reviewWriteDto);
-        return ResponseEntity.status(HttpStatus.OK).body(reviewWriteDto1);
-    }*/
+    @PostMapping("/review/{id}/edit/{review_id}")
+    public ResponseEntity<String> editReview(@PathVariable Integer id,
+                                             @PathVariable Integer review_id,
+                                             @RequestBody ReviewWriteDto reviewWriteDto) {
+        try {
+            reviewWriteDto.setId(id);
+            reviewWriteDto.setReview_id(review_id);
 
-    /*@PutMapping("/edit")
-    public String*/
+            ReviewWriteDto editedReview = reviewService.editReview(reviewWriteDto);
+            return new ResponseEntity<>("수정이 완료되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("수정 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/review/{id}/delete/{review_id}")
+    public ResponseEntity<String> deleteReview(@PathVariable Integer id,
+                                               @PathVariable Integer review_id) {
+        try {
+            reviewService.deleteReview(id, review_id);
+            return new ResponseEntity<>("삭제가 완료되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("삭제 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
