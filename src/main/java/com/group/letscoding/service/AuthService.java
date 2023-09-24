@@ -2,6 +2,7 @@ package com.group.letscoding.service;
 
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.domain.user.UserRepository;
+import com.group.letscoding.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class AuthService {
     public boolean isUsernameDuplicate(String username) {
         User user = userRepository.findByUsername(username);
         return user != null;
+    }
+
+    @Transactional(readOnly = true)
+    public User getUser(String username) {
+        return userRepository.findByUsername(username);
     }
 }

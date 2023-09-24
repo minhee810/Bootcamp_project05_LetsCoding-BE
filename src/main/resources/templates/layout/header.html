@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-           xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title>Bootstrap Example</title>
@@ -29,7 +28,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}"><a class="nav-link" href="/auth/loginForm">로그인</a></li>
             <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}"><a class="nav-link" href="/auth/joinForm">회원가입</a></li>
-            <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"><a class="nav-link" href="/user/updateForm">마이페이지</a></li>
+            <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"><a class="nav-link" href="/mypage/mypageForm">마이페이지</a></li>
             <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}"><a class="nav-link" href="/logout">로그아웃</a></li>
         </ul>
     </div>
