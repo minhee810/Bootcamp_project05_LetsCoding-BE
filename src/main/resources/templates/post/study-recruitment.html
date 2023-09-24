@@ -8,6 +8,20 @@
         window.history.back();
     }
 
+    function goModify() {
+        // 데이터를 폼에 세팅
+        document.getElementById("formTitle").value = document.getElementById("title").textContent;
+        document.getElementById("formTopic").value = document.getElementById("topic").textContent;
+        document.getElementById("formSkills").value = document.getElementById("skills").textContent;
+        document.getElementById("formStartDate").value = document.getElementById("start_date").textContent;
+        document.getElementById("formEndDate").value = document.getElementById("end_date").textContent;
+        document.getElementById("formMaxNum").value = document.getElementById("max_num").textContent;
+        document.getElementById("formContent").value = document.getElementById("content").textContent;
+
+        // 폼 제출
+        document.getElementById("modifyForm").submit();
+    }
+
     // // 바로 AJAX 요청 시작
     // var recruitmentId = $("#someElement").data("recruitmentId");
     //
@@ -63,34 +77,49 @@
 
 </style>
 
-<div id="detailContent" class="container">
-    <div>
-        제목 : <span id = "title" th:text="${post.title}"></span>
+<form th:action="@{/study/update-post}" th:object="${post}" method="post">
+    <div id="detailContent" class="container">
+        <div>
+            제목 : <span id = "title" th:text="${post.title}"></span>
+            <input type="hidden" th:field="*{title}" id="formTitle" />
+        </div>
+        <div>
+            주제: <span id="topic" th:text="${post.topic}"></span>
+            <input type="hidden" th:field="*{topic}" id="formTopic" />
+        </div>
+        <div >
+            기술 스택 :  <span id="skills" th:text="${post.skills}"></span>
+            <input type="hidden" th:field="*{skills}" id="formSkills" />
+        </div>
+        <div>
+            시작일 :  <span id="start_date" th:text="${post.start_date}"></span>
+            <input type="hidden" th:field="*{start_date}" id="formStartDate" />
+        </div>
+        <div>
+            종료일 :  <span id="end_date" th:text="${post.end_date}"></span>
+            <input type="hidden" th:field="*{end_date}" id="formEndDate" />
+        </div>
+        <div>
+            모집 인원 :  <span id="max_num" th:text="${post.max_num}"></span>
+            <input type="hidden" th:field="*{max_num}" id="formMaxNum" />
+        </div>
+        <div>
+            모집 내용 :  <span id="content" th:text="${post.content}"></span>
+            <input type="hidden" th:field="*{content}" id="formContent" />
+        </div>
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
     </div>
-    <div >
-        주제: <span id="topic" th:text="${post.topic}"></span>
-    </div>
-    <div >
-        기술 스택 :  <span id="skills" th:text="${post.skills}"></span>
-    </div>
-    <div>
-        시작일 :  <span id="start_date" th:text="${post.start_date}"></span>
-    </div>
-    <div>
-        종료일 :  <span id="end_date" th:text="${post.end_date}"></span>
-    </div>
-    <div>
-        모집 인원 :  <span id="max_num" th:text="${post.max_num}"></span>
-    </div>
-    <div>
-        모집 내용 :  <span id="content" th:text="${post.content}"></span>
-    </div>
+</form>
 
     <br/>
 
-    <button type="button" class="btn btn-light" onclick="goBack()">목록</button>
     <div class="button-group">
+        <button type="button" class="btn btn-light" onclick="goBack()">목록</button>
         <button type="button" class="btn btn-light" onclick="goBack()">뒤로 가기</button>
+        <button type="submit" class="btn btn-light">수정</button>
     </div>
 
 </div>

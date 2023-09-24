@@ -30,26 +30,27 @@ public class PostApiController {
         this.postService = postService;
     }
 
-    @PostMapping("/api/study/create-post")  // 사용자 정보 받아옴.
-    public ResponseEntity<?> createPost(@RequestBody PostDto postDto,
-                                        @AuthenticationPrincipal PrincipalDetails principalDetails){
-
-        log.info(postDto.toString());
-
-        StudyPost studyPost = postService.savePost(postDto.getTitle(), postDto.getTopic(),
-                postDto.getStart_date(), postDto.getSkills(), postDto.getEnd_date(),postDto.getMax_num(), postDto.getContent(),
-                principalDetails.getUser().getId());
-
-        System.out.println("##########post######### : "+ studyPost);
-        return new ResponseEntity<>(new CMRespDto<>(1, "글 저장 성공", studyPost), HttpStatus.CREATED);
-
-
-    }
+//    @PostMapping("/api/study/create-post")  // 사용자 정보 받아옴.
+//    public ResponseEntity<?> createPost(@RequestBody PostDto postDto,
+//                                        @AuthenticationPrincipal PrincipalDetails principalDetails){
+//
+//        log.info(postDto.toString());
+//
+//        StudyPost studyPost = postService.savePost(postDto.getTitle(), postDto.getTopic(),
+//                postDto.getStart_date(), postDto.getSkills(), postDto.getEnd_date(),postDto.getMax_num(), postDto.getContent(),
+//                principalDetails.getUser().getId());
+//
+//        return new ResponseEntity<>(new CMRespDto<>(1, "글 저장 성공", studyPost), HttpStatus.CREATED);
+//
+//    }
 
     /**
      * 스터디 모집 글 상세 페이지 - kang
      * @param recruitmentId
      * @return
+     */
+    /*
+    허찬 : 상세보기는 굳이 Restful하게 처리할 필요 없어서 통상적인 mvc 방식으로 처리
      */
 //    // 2. 모집 글 상세보기 페이지
 //    @GetMapping("api/study/study-recruitment/{recruitmentId}")

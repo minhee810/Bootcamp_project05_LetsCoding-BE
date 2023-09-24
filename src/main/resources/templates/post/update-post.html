@@ -44,29 +44,30 @@
 
 <div class="container text">
 
-    <form action="#" method="#" style="width: 900px;" class="mx-auto">
+    <form action="#" id="updateForm" method="#" style="width: 900px;" class="mx-auto">
 
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" name="username" class="form-control" placeholder="제목을 입력해주세요." id="title">
+            <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요." id="title" th:value="${post.title}">
         </div>
 
         <div class="form-group">
             <label for="topic">주제</label>
-            <input type="text" name="username" class="form-control" placeholder="제목을 입력해주세요." id="topic">
+            <input type="text" name="topic" class="form-control" placeholder="주제를 입력해주세요." id="topic" th:value="${post.topic}">
         </div>
 
         <div class="form-group">
             <label for="start_date"> 시작 예정일 </label>
-            <input type="date" id="start_date" name="postDate" class="form-control">
+            <input type="date" id="start_date" name="start_date" class="form-control" th:value="${post.start_date}">
         </div>
 
         <div class="form-group">
             <label for="end_date"> 종료 예정일 </label>
-            <input type="date" id="end_date" name="postDate" class="form-control">
+            <input type="date" id="end_date" name="end_date" class="form-control" th:value="${post.end_date}">
         </div>
+
         <label for="maxNum"> 모집 인원 </label>
-        <select id="maxNum" name="maxNum">
+        <select id="maxNum" name="maxNum" th:value="${post.max_num}">
             <option value="1">1명</option>
             <option value="2">2명</option>
             <option value="3">3명</option>
@@ -78,12 +79,13 @@
             <option value="9">9명</option>
             <option value="10">10명</option>
         </select>
+
         <hr/>
         <!--summer note-->
         <div id="summernote" class="container"></div>
         <div class="button-group">
             <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
-            <button type="button" class="btn btn-primary">작성</button>
+            <button type="button" class="btn btn-primary" th:href="@{/study/study-recruitment/{recruitmentId}(id=${postResponseDto.recruitmentId})}">수정</button>
             <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
         </div>
         <br/>

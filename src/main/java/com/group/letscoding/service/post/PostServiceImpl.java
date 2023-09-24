@@ -93,7 +93,10 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public StudyPost savePost(String title, String topic, Date startDate, String skills, Date endDate, int max_num, String content, Long userId){
+    public StudyPost savePost(String title, String topic, Date startDate,
+                              String skills, Date endDate,
+                              int max_num, String content,
+                              Long userId){
 
         User userEntity = userRepository.findById(userId).orElseThrow(()->{
             return new RuntimeException("유저 아이디를 찾을 수 없습니다.");

@@ -1,5 +1,6 @@
 package com.group.letscoding.controller;
 
+import com.group.letscoding.config.auth.PrincipalDetails;
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.service.post.PostServiceImpl;
 import com.group.letscoding.dto.post.PostResponseDto;
@@ -9,12 +10,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller                     // * 페이지 이동 컨트롤러
@@ -117,8 +123,37 @@ public class PostController {
         return "/post/post-list";
     }
 
+    //7. 스터디 구인 글 작설
+    @PostMapping("/study/create-post")
+    public String createPost(@RequestParam String title,
+                             @RequestParam String topic,
+                             @RequestParam String skills,
+                             @RequestParam String String_start_date,
+                             @RequestParam String String_end_date,
+                             @RequestParam int max_num,
+                             @RequestParam String content,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-//    //convert StudyPost -> PostDTO
+        Date start_date = convertStringToDate(String_start_date);
+        Date end_date = convertStringToDate(String_end_date);
+
+        postService.savePost(title,topic,start_date,skills,
+                        end_date,max_num,content,principalDetails.getUser().getId());
+
+        return "redirect:/post/list"; // 처리 후 리다이렉트
+    }
+    public Date convertStringToDate(String dateStr) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.parse(dateStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    //convert StudyPost -> PostDTO
 //    private Page<PostDTO> getPageDTOs(Page<PostDTO> postDTOList, Page<StudyPost> postList) {
 //        for(StudyPost post : postList){
 //            PostDTO postDTO = new PostDTO();
