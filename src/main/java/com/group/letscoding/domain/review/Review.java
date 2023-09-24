@@ -1,5 +1,6 @@
 package com.group.letscoding.domain.review;
 
+import com.group.letscoding.domain.group.Group;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,10 +24,10 @@ public class Review {
     @Column(nullable = false)
     private String content;
 
-    /*@ManyToOne
-    @JoinColumn(name = "studyGroup_id")
+    @ManyToOne
+    @JoinColumn(name = "group_id")
     @ToString.Exclude
-    private StudyGroup studyGroup;*/
+    private Group group;
 
     private LocalDateTime createdDate;
 }

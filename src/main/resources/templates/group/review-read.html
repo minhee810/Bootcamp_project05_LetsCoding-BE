@@ -1,10 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<div th:replace="layout/header"></div>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <title>회고 상세보기</title>
+    <script>
+        function cancelWrite() {
+            // 현재 페이지에서 이전 페이지로 돌아가는 동작
+            window.history.back();
+        }
+        function edit() {
+            // 수정 버튼을 "수정완료"로 변경
+            var editButton = document.getElementById("editButton");
+            editButton.style.display = "none"; // "수정" 버튼을 숨깁니다.
 
+            var submitButton = document.getElementById("submitButton");
+            submitButton.style.display = "block"; // "수정완료" 버튼을 보이게 합니다.
+
+            // 제목과 내용을 수정 가능하게
+            document.getElementById("title").removeAttribute("readonly");
+            document.getElementById("content").removeAttribute("readonly");
+        }
+
+
+        function submitEdit() {
+            var id = document.getElementById("id").value;
+            var review_id = document.getElementById("review_id").value;
+
+            // 수정된 내용 가져오기
+            var title = document.getElementById("title").value;
+            var content = document.getElementById("content").value;
+
+            // AJAX를 사용하여 서버에 수정된 내용 전송
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/review/" + id + "/edit/" + review_id, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // 수정이 성공한 경우 처리
+                    alert("수정이 완료되었습니다.");
+                    window.location.reload(); // 페이지 리로드
+                } else {
+                    // 수정이 실패한 경우 처리
+                    alert("수정 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
+            };
+
+            var data = JSON.stringify({
+                id: id,
+                review_id: review_id,
+                title: title,
+                content: content
+            });
+
+            xhr.send(data);
+        }
+        function deleteReview() {
+            var id = document.getElementById("id").value;
+            var review_id = document.getElementById("review_id").value;
+
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/review/" + id + "/delete/" + review_id, true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        alert("삭제가 완료되었습니다.");
+                        window.location.href = "/review/" + id + "/list";
+                    } else {
+                        alert("삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                };
+
+                var data = JSON.stringify({
+                    id: id,
+                    review_id: review_id
+                });
+
+                xhr.send(data);
+            }
+        }
+    </script>
+</head>
+<style>
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .button-group button {
+        margin: 5px;
+    }
+</style>
+<body>
+<div class="col-sm-12">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div class="container text">
+            <input type="hidden" id="id" th:value="${id}">
+            <input type="hidden" id="review_id" th:value="${review_id}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" class="form-control" th:value="${review.title}" readonly>
+            </div>
+            <hr/>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea name="content" id="content" class="form-control" th:text="${reviewContent.content}" readonly></textarea>
+            </div>
+            <div class="button-group">
+                <button id="editButton" type="button" class="btn btn-primary" onclick="edit()">수정</button>
+                <button id="submitButton" type="button" class="btn btn-primary" style="display:none;" onclick="submitEdit()">수정완료</button>
+                <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
+                <button type="button" class="btn btn-light" onclick="deleteReview()">삭제</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2"></div>
+</div>
 </body>
+<div th:replace="layout/footer"></div>
 </html>

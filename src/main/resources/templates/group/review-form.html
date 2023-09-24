@@ -44,27 +44,30 @@
         }
 
         function submit(){
-            var title = $('#title').val();
-            var content = $('content').val();
+            var title = document.getElementById("title").value;
+            var content = document.getElementById("content").value;
 
-            var reviewDAta = {
-                title: title,
-                content: content,
+            var id = parseInt(document.getElementById("id").value);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/group/" + id + "/write", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert("회고 글이 등록되었습니다.");
+                    window.location.href = "/review/" + id + "/list";
+                } else {
+                    alert("글 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
             };
 
-            $.ajax({
-                type: 'POST',
-                url: '/api/review/reviewWrite',
-                data: JSON.Stringify(reviewDAta),
-                contentType: 'application/json',
-                success: function(response){
-                    console.log(response);
-                    location.href = "/group/groupForm" /*+ response.id*/
-                },
-                error: function (error) {
-                    console.log(error);
-                }
+            var data = JSON.stringify({
+                id: id,
+                title: title,
+                content: content
             });
+            xhr.send(data);
         }
     </script>
 
@@ -78,21 +81,22 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
         <div class="container text">
-            <form action="/api/review/reviewWrite" method="post" style="width: 900px;" class="mx-auto">
-                <div class="form-group">
-                    <label for="title">제목</label>
-                    <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요." id="title">
-                </div>
-                <hr/>
+            <input type="hidden" id="id" th:value="${id}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력해주세요.">
+            </div>
+            <hr/>
 
-                <!--summer note-->
-                <div id="summernote" name="content" class="container"></div>
-                <div class="button-group">
-                    <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
-                    <button type="button" class="btn btn-primary" onclick="submit()">작성</button>
-                    <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
-                </div>
-            </form>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea name="content" id="content" class="form-control" placeholder="내용을 입력해주세요."></textarea>
+            </div>
+            <div class="button-group">
+                <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
+                <button type="button" class="btn btn-primary" onclick="submit()">작성</button>
+                <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
+            </div>
             <br/>
         </div>
     </div>
