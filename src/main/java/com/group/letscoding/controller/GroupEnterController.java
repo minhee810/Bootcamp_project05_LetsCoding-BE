@@ -1,11 +1,14 @@
 package com.group.letscoding.controller;
 
+import com.group.letscoding.config.auth.PrincipalDetails;
+import com.group.letscoding.domain.group.Group;
 import com.group.letscoding.domain.group.GroupRepository;
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.domain.user.UserRepository;
 import com.group.letscoding.dto.user.UserDto;
 import com.group.letscoding.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +29,11 @@ public class GroupEnterController {
         this.groupRepository = groupRepository;
     }
 
-    @GetMapping("/group/{id}")
+    /*@GetMapping("/group/{id}")
     public String groupForm(@PathVariable Integer id, Model model){
         model.addAttribute("id", id);
         return "/group/group-form";
-    }
+    }*/
 
     @GetMapping("/group/{id}/inviteForm")
     public String groupInviteForm(@PathVariable Integer id, String username, Model model){

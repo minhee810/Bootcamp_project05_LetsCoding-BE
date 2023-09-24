@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <div th:replace="layout/header"></div>
+
 <head>
     <style>
         * {
             box-sizing: border-box;
         }
 
-        #myInput {
+        .search-container {
+            text-align: center;
+        }
+
+        #inputMember {
             background-image: url('/static/images/searchicon.png');
             background-position: 10px 12px;
             background-repeat: no-repeat;
-            width: 90%;
+            width: 25%;
             font-size: 16px;
             padding: 12px 20px 12px 40px;
             border: 1px solid #ddd;
@@ -19,13 +24,15 @@
 
         #myUL {
             list-style-type: none;
-            padding: 0;
-            margin: 0;
+            margin: 0 auto;
+            width: 50%;
+            text-align: center;
         }
 
         #myUL li a {
             border: 1px solid #ddd;
-            margin-top: -1px; /* Prevent double borders */
+            margin-top: -1px;
+            /* Prevent double borders */
             background-color: #f6f6f6;
             padding: 12px;
             text-decoration: none;
@@ -38,18 +45,24 @@
             background-color: #eee;
         }
 
-        #custom {
-            width: 8%;
+        #inviteMember {
+            width: 5%;
             height: 50px;
             margin-bottom: 6px;
         }
     </style>
 </head>
+
 <body>
-<br/>
+<br />
 <h2 align="center">그룹 인원 보기</h2>
-<br/><br/>
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">&nbsp;<button type="button" id="custom" class="btn btn-primary">추가</button>
+<br /><br />
+
+<div class="search-container" th:if="${isLeader}">
+    <input type="text" id="inputMember" placeholder="Search for names.." title="Type in a name">
+    <input type="hidden" id="groupId" th:value="${id}" />
+    <button type="button" onclick="addMember()" id="inviteMember" class="btn btn-primary">추가</button>
+</div>
 
 <!-- 그룹 참여 인원 목록-->
 <ul id="myUL">
@@ -57,25 +70,9 @@
         <a th:text="${user.username}" href="#"></a>
     </li>
 </ul>
-
-<script>
-    function myFunction() {
-        var input, filter, ul, li, a, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        ul = document.getElementById("myUL");
-        li = ul.getElementsByTagName("li");
-        for (i = 0; i < li.length; i++) {
-            a = li[i].getElementsByTagName("a")[0];
-            txtValue = a.textContent || a.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                li[i].style.display = "";
-            } else {
-                li[i].style.display = "none";
-            }
-        }
-    }
-</script>
 </body>
+
+<script src="/js/group.js"></script>
 <div th:replace="layout/footer"></div>
+
 </html>

@@ -94,3 +94,43 @@ function createStudyGroup() {
         }
     });
 }
+
+function addMember() {
+    let username = $("#inputMember").val();
+    let groupId = $("#groupId").val();
+
+    $.ajax({
+        url: `/api/auth/checkUserExist`,
+        method: "POST",
+        data: username,
+        contentType: "text/plain",
+        dataType: "json"
+    }).done(function (response) {
+        if (response.code === 1) {
+            if (confirm("해당 멤버를 추가하시겠습니까?")) {
+                let userId = response.data;
+                $.ajax({
+                    url: `/api/study-group/add-member`,
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ userId: userId, groupId: groupId }),
+                    dataType: "json"
+                }).done(function (res) {
+                    if (res.code === 1) {
+                        alert("멤버가 추가되었습니다.");
+                        location.href = "/group/list";
+                        location.reload();
+                    } else {
+                        alert("멤버 추가에 실패하였습니다.");
+                    }
+                }).fail(function (err) {
+                    alert("서버 오류가 발생하였습니다.");
+                });
+            }
+        } else {
+            alert("존재하지 않는 사용자입니다.");
+        }
+    }).fail(function (error) {
+        alert("서버 오류가 발생하였습니다.");
+    });
+}

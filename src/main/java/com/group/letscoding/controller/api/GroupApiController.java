@@ -1,12 +1,13 @@
 package com.group.letscoding.controller.api;
 
 import com.group.letscoding.config.auth.PrincipalDetails;
+import com.group.letscoding.domain.StudyGroupMember.GroupMember;
 import com.group.letscoding.domain.group.Group;
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.dto.CMRespDto;
 import com.group.letscoding.dto.group.GroupCreateDto;
+import com.group.letscoding.dto.group.GroupMemberRequest;
 import com.group.letscoding.handler.ex.CustomValidationApiException;
-import com.group.letscoding.handler.ex.CustomValidationException;
 import com.group.letscoding.service.GroupService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -35,6 +36,11 @@ public class GroupApiController {
 
     private final GroupService groupService;
 
+    @ApiOperation(value = "스터디 그룹 목록 조회", notes = "로그인한 사용자가 소속된 스터디 그룹 목록을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청")
+    })
     @GetMapping("/api/study-group/list")
     public ResponseEntity<?> getGroupList(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                           @PageableDefault(size = 3) Pageable pageable) {
@@ -59,6 +65,21 @@ public class GroupApiController {
         } else {
             Group group = groupService.createGroup(fromDto(groupCreateDto, principalDetails.getUser()), principalDetails.getUser());
             return new ResponseEntity<>(new CMRespDto<>(1, "스터디 그룹 생성 성공", group), HttpStatus.CREATED);
+        }
+    }
+
+    @ApiOperation(value = "스터디 그룹 멤버 추가", notes = "스터디 그룹에 새로운 멤버를 추가합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "멤버가 추가되었습니다."),
+            @ApiResponse(code = 500, message = "멤버 추가에 실패하였습니다.")
+    })
+    @PostMapping("/api/study-group/add-member")
+    public ResponseEntity<?> addMember(@RequestBody GroupMemberRequest groupMemberRequest) {
+        try {
+            groupService.addMember(groupMemberRequest.getGroupId(), groupMemberRequest.getUserId());
+            return new ResponseEntity<>(new CMRespDto<>(1, "멤버가 추가되었습니다.", null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CMRespDto<>(-1, "멤버 추가에 실패하였습니다.", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

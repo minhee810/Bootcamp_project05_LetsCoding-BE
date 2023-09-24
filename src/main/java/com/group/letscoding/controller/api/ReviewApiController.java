@@ -34,6 +34,11 @@ public class ReviewApiController {
         return ResponseEntity.status(HttpStatus.OK).body(savedReview);
     }
 
+    /*@PostMapping("/write")
+    public ResponseEntity reviewWrite(@RequestBody ReviewWriteDto reviewWriteDto){
+        ReviewWriteDto reviewWriteDto1 = reviewService.reviewWrite(reviewWriteDto);
+        return ResponseEntity.status(HttpStatus.OK).body(reviewWriteDto1);
+    }*/
 
     /*@PutMapping("/edit")
     public String*/

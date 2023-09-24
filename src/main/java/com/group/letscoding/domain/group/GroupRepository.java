@@ -1,7 +1,6 @@
 package com.group.letscoding.domain.group;
 
 import com.group.letscoding.domain.user.User;
-import com.group.letscoding.dto.user.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +16,4 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
             "(SELECT group_id FROM group_member gm WHERE gm.user_id = :principalId) " +
             "ORDER BY g.id DESC", nativeQuery = true)
     Page<Group> mGroupList(Long principalId, Pageable pageable);
-
-    @Query(value = "SELECT u.* FROM user u JOIN group_member gm ON u.id = gm.user_id WHERE gm.group_id = :groupId", nativeQuery = true)
-    List<User> findUsersInGroup(@Param("groupId") Integer groupId);
 }
