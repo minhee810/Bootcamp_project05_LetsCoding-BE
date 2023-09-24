@@ -26,5 +26,7 @@ interface PostService {
     PostResponseDto updatePost(int id, PostDto postDto);
     PostResponseDto deletePost(int id) throws Exception;
 
+    PostResponseDto getPostById(int recruitmentId);
+
 
 }

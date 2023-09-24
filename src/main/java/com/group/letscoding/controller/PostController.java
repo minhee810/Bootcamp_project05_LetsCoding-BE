@@ -2,6 +2,7 @@ package com.group.letscoding.controller;
 
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.service.post.PostServiceImpl;
+import com.group.letscoding.dto.post.PostResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -52,7 +54,9 @@ public class PostController {
 
     // 2. 모집 글 상세보기 페이지로 이동
     @GetMapping("/study/study-recruitment/{recruitmentId}")
-    public String recruitment(){
+    public String recruitment(@PathVariable int recruitmentId, Model model){
+        PostResponseDto postResponseDto = postService.getPostById(recruitmentId);
+        model.addAttribute("post", postResponseDto);
         return "post/study-recruitment";
     }
 

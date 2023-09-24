@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
 
@@ -110,6 +111,30 @@ public class PostServiceImpl implements PostService {
 
         System.out.println("savePost() : " + studyPost);
         return studyPostRepository.save(studyPost);
+    }
+
+    @Override
+    public PostResponseDto getPostById(int recruitmentId) {
+        System.out.println("#### PostServiceImpl getPostById() #### : " + recruitmentId);
+
+
+        StudyPost postEntity = studyPostRepository.findById(recruitmentId).orElseThrow(()->{
+            return new EntityNotFoundException("해당 글이 존재하지 않습니다.  recruitmentId : "+ recruitmentId);
+        });
+
+        // 게시글 Entity를 DTO로 변환
+        PostResponseDto postResponseDto = new PostResponseDto();
+        postResponseDto.setId(postEntity.getPost_id());
+        postResponseDto.setSkills(postEntity.getSkills());
+        postResponseDto.setTitle(postEntity.getTitle());
+        postResponseDto.setTopic(postEntity.getTopic());
+        postResponseDto.setContent(postEntity.getContent());
+        postResponseDto.setStart_date(postEntity.getStart_date());
+        postResponseDto.setEnd_date(postEntity.getEnd_date());
+        postResponseDto.setMax_num(postEntity.getMax_num());
+
+        System.out.println("#### service PostResponseDto #### :" + postResponseDto.toString());
+        return postResponseDto;
     }
 
     @Override

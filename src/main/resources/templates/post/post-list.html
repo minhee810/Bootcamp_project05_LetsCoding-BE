@@ -85,7 +85,7 @@
                     기술 스택 :
                     <span th:each="skills : ${studyPost.getSkills()}" th:text="${skills}">기술 스택 정보가 없습니다.</span>
                 </p>
-                <a th:href="@{'/board/' + ${studyPost.getPost_id()}}" class="btn btn-primary">상세보기</a>
+                <a th:href="@{'/study/study-recruitment/' + ${studyPost.getPost_id()}}" class="btn btn-primary">상세보기</a>
             </div>
         </div>
     </div>
