@@ -83,12 +83,19 @@
                 <h4 class="card-title" th:text="${studyPost.getTitle()}">제목이 없습니다.</h4>
                 <p class="card-text">
                     기술 스택 :
-                    <span th:each="skill : ${studyPost.getSkill()}" th:text="${skill}">기술 스택 정보가 없습니다.</span>
+                    <span th:each="skills : ${studyPost.getSkills()}" th:text="${skills}">기술 스택 정보가 없습니다.</span>
                 </p>
                 <a th:href="@{'/board/' + ${studyPost.getPost_id()}}" class="btn btn-primary">상세보기</a>
             </div>
         </div>
     </div>
+</div>
+
+<br />
+
+<!-- 스터디 생성 버튼 -->
+<div class="d-flex justify-content-center mt-4">
+    <a href="/study/create-post" class="btn btn-primary">스터디 생성하기</a>
 </div>
 
 <br />
