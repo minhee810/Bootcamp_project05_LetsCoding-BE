@@ -6,9 +6,10 @@
 </head>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // 전체 아이템 수와 페이지당 아이템 수 설정
-        var totalItems = getTotalReviewCountByGroupId(groupId); /* 전체 아이템 수 */;
+        var totalItems = getTotalReviewCountByGroupId(id); /* 전체 아이템 수 */
+        ;
         var itemsPerPage = 10;
         var totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -32,7 +33,7 @@
         $('#pagination').html(paginationHTML);
 
         // 페이지 클릭 이벤트 핸들러
-        $('#pagination').on('click', 'a.page-link', function(e){
+        $('#pagination').on('click', 'a.page-link', function (e) {
             e.preventDefault();
             var targetPage = $(this).data('page');
 
@@ -51,16 +52,26 @@
         // 페이지에 따라 리뷰를 로딩하는 함수
         function loadReviewsForPage(page) {
             $.ajax({
-                url: '/group/{groupId}/list?page=' + page, // 해당 그룹의 페이지를 불러오는 엔드포인트로 수정해야 합니다.
+                url: '/group/' + ${id} +'/list?page=' + page, // 해당 그룹의 페이지를 불러오는 엔드포인트로 수정해야 합니다.
                 type: 'GET',
-                success: function(data) {
+                success: function (data) {
                     // data는 서버에서 반환한 페이지의 리뷰 데이터입니다.
                     // 여기에서 리뷰를 동적으로 업데이트하거나 렌더링하는 로직을 구현합니다.
-                    $('#reviewsTable').html(data); // 예시: 리뷰 테이블 업데이트
+                    $('#reviewsTable tbody').empty(); // 기존 내용을 모두 지우고 시작
+                    if (Array.isArray(data)) {
+                        data.forEach(function (review) {
+                            var row = '<tr>';
+                            row += '<td>' + review.userName + '</td>';
+                            row += '<td>' + review.title + '</td>';
+                            row += '<td>' + review.content + '</td>';
+                            row += '</tr>';
+                            $('#reviewsTable tbody').append(row);
+                        });
+                    }
                 }
             });
         }
-    });
+    })
 </script>
 <body>
     <div class="container">
@@ -73,18 +84,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="reviewWithUserName  : ${reviewWithUserName}">
-                    <td th:text="${reviewWithUserName.userName}"></td>
-                    <td th:text="${reviewWithUserName.review.title}"></td>
-                    <td th:text="${reviewWithUserName.review.content}"></td>
+                <tr th:each="review : ${reviews.content}">
+                    <td th:text="${review.userName}"></td>
+                    <td th:text="${review.title}"></td>
+                    <td th:text="${review.content}"></td>
                 </tr>
             </tbody>
         </table>
+        <a th:href="@{/review/{id}/write(id=${id})}" class="btn btn-primary" role="button">회고 작성</a>
     </div>
-    <ul class="pagination">
+    <ul id="pagination" class="pagination">
         <li class="page-item"><a class="page-link" href="#">Previous</a></li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
         <li class="page-item"><a class="page-link" href="#">3</a></li>
         <li class="page-item"><a class="page-link" href="#">4</a></li>
         <li class="page-item"><a class="page-link" href="#">5</a></li>

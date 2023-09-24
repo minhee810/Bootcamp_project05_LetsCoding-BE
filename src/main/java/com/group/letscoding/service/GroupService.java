@@ -39,7 +39,8 @@ public class GroupService {
         return group;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getUsersInGroup(Integer id) {
+        return groupRepository.findUsersInGroup(id);
     }
+
 }

@@ -45,21 +45,30 @@
 
         function submit(){
             var title = $('#title').val();
-            var content = $('content').val();
+            var content = $('#content').val();
 
-            var reviewDAta = {
-                title: title,
-                content: content,
-            };
+            var id = parseInt('{id}'); // 문자열을 숫자로 변환
+
+            var formData = new FormData();
+            formData.append("id", id);
+            formData.append("title", title);
+            formData.append("content", content);
+
+            console.log(reviewData)
 
             $.ajax({
                 type: 'POST',
-                url: '/api/review/reviewWrite',
-                data: JSON.Stringify(reviewDAta),
-                contentType: 'application/json',
+                url: '/api/group/' + id + '/write',
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response){
-                    console.log(response);
-                    location.href = "/group/groupForm" /*+ response.id*/
+                    if (response.code === 1){
+                        alert("회고가 등록되었습니다.")
+                        location.href = "/group/"+ id + "/list";
+                    } else {
+                        alert("글 작성에 실패하였습니다.")
+                    }
                 },
                 error: function (error) {
                     console.log(error);
@@ -78,15 +87,20 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
         <div class="container text">
-            <form action="/api/review/reviewWrite" method="post" style="width: 900px;" class="mx-auto">
-                <div class="form-group">
+            <form action="/api/group/{id}/write" method="post" style="width: 900px;" class="mx-auto">
+            <div class="form-group">
                     <label for="title">제목</label>
-                    <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요." id="title">
-                </div>
+                    <input type="text" id="title" class="form-control" placeholder="제목을 입력해주세요.">
+            </div>
+                    <input type="hidden" id="id" value="${id}">
                 <hr/>
 
                 <!--summer note-->
-                <div id="summernote" name="content" class="container"></div>
+                <!--<div id="summernote" name="content" class="container"></div>-->
+                <div class="form-group">
+                    <label for="content">내용</label>
+                    <textarea name="content" id="content" class="form-control"></textarea>
+                </div>
                 <div class="button-group">
                     <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
                     <button type="button" class="btn btn-primary" onclick="submit()">작성</button>

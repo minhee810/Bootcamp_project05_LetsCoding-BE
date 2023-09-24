@@ -34,20 +34,15 @@ public class GroupEnterController {
 
     @GetMapping("/group/{id}/inviteForm")
     public String groupInviteForm(@PathVariable Integer id, String username, Model model){
-        List<Map<String, Object>> usersInGroup = groupRepository.findUserInGroup(id);
+        List<User> usersInGroup = groupRepository.findUsersInGroup(id);
 
         model.addAttribute("usersInGroup", usersInGroup);
         model.addAttribute("id", id);
         model.addAttribute("username", username);
 
-        List<User> userList = groupService.getAllUsers();
+        List<User> userList = groupService.getUsersInGroup(id);
         model.addAttribute("users", userList);
 
         return "group/invite";
-    }
-
-    @GetMapping("/group/reviewWriteForm")
-    public String reviewWriteForm(){
-        return "/group/review-form";
     }
 }

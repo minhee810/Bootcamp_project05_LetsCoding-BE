@@ -18,8 +18,6 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
             "ORDER BY g.id DESC", nativeQuery = true)
     Page<Group> mGroupList(Long principalId, Pageable pageable);
 
-    @Query(value = "SELECT u.username FROM user u WHERE u.id IN" +
-            "(SELECT user_id FROM group_member gm WHERE gm.group_id = :id)", nativeQuery = true)
-    List<Map<String, Object>> findUserInGroup(@Param("id") Integer id);
-
+    @Query(value = "SELECT u.* FROM user u JOIN group_member gm ON u.id = gm.user_id WHERE gm.group_id = :groupId", nativeQuery = true)
+    List<User> findUsersInGroup(@Param("groupId") Integer groupId);
 }

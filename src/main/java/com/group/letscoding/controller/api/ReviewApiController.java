@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/review")
 public class ReviewApiController {
 
     private ReviewService reviewService;
@@ -18,11 +17,23 @@ public class ReviewApiController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("/write")
-    public ResponseEntity reviewWrite(@RequestBody ReviewWriteDto reviewWriteDto){
-        ReviewWriteDto reviewWriteDto1 = reviewService.reviewWrite(reviewWriteDto);
-        return ResponseEntity.status(HttpStatus.OK).body(reviewWriteDto1);
+    @PostMapping("/api/group/{id}/write")
+    public ResponseEntity reviewWrite(
+            @PathVariable("id") Integer id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content
+    ){
+        ReviewWriteDto reviewWriteDto = new ReviewWriteDto();
+        reviewWriteDto.setTitle(title);
+        reviewWriteDto.setContent(content);
+        reviewWriteDto.setId(id);
+
+        ReviewWriteDto savedReview = reviewService.reviewWrite(reviewWriteDto);
+        System.out.println(title);
+        System.out.println(content);
+        return ResponseEntity.status(HttpStatus.OK).body(savedReview);
     }
+
 
     /*@PutMapping("/edit")
     public String*/
