@@ -29,3 +29,6 @@ spring:
     user:
       name: test
       password: 1234
+
+HeoJungBaekKang:
+  key: 1q2w3e4r
