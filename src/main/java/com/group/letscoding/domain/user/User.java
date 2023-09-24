@@ -28,6 +28,8 @@ public class User {
     private String role;
     private LocalDateTime createDate;
 
+    private String oauth;
+
     @PrePersist
     public void createDate() {
         this.createDate = LocalDateTime.now();
