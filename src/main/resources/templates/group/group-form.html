@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <title>그룹</title>
+  <meta charset="utf-8">
+  <div th:replace="layout/header"></div>
+  <style>
+    div.scroller {
+      height: 800px;
+      overflow-y: scroll;
+      scrollbar-color: pink lightblue;
+      margin-left: 20px;
+    }
+
+    .custom-btn {
+      width: 370px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+
+<body>
+<br />
+<!--body start-->
+<div class="container-fluid">
+  <div class="row">
+    <!-- list -->
+    <div class="col-sm-8">
+    </div>
+    <div class="col-sm-4">
+      <div>
+        <input type="text" value="th:value=*{createDate} ~ *{endDate}" readonly style="width: 350px; text-align: center;" />
+        <br /><br /><br />
+        <h2>groupName</h2>
+        <br /><br /><br />
+        <a href="/group/reviewWriteForm" class="btn btn-secondary custom-btn" role="button">회고 작성</a>
+        <br />
+        <button type="button" class="btn btn-secondary custom-btn">출석</button>
+        <br />
+        <form th:action="@{'/group/' + ${id} + '/inviteForm'}" method="get">
+          <button type="submit" class="btn btn-secondary custom-btn">스터디 멤버</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div th:replace="layout/footer"></div>
+</body>
+
+</html>

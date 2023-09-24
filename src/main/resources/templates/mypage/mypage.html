@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<head>
+    <title>마이페이지</title>
+    <meta charset="utf-8">
+    <div th:replace="layout/header"></div>
+</head>
+<style>
+    .side-card {
+        height: 100%;
+        width: 180px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #666699;
+        overflow-x: hidden;
+        padding-top: 5px;
+        top: 57px;
+    }
+    .card-profile {
+        height: 300px;
+        width: 165px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .card-settings {
+        height: 150px;
+        margin-left: 200px;
+    }
+    .footer {
+        margin-left: 180px;
+    }
+</style>
+<body>
+<br />
+<!-- body start -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="side-card">
+                <div class="card-profile bg-light">
+                    <div class="card-body text-center">
+                        <p class="card-text">
+                            <img src="/images/profile.jpg" /><br/>
+                            <br />
+                            <div>
+                            <p>User ID: <span th:text="${user.name}"></span></p>
+                            <p>User Name:<br/> <span th:text="${user.username}"></span></p>
+                            <br/>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="settings">
+                    <div class="card-body text-center">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-header">보안 설정</div>
+                                    <div class="card-body">비밀번호 <input type="button" class="btn btn-secondary" onclick="location.href='/mypage/changePassword'" value="수정"></div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <br /><br/>
+                    <div class="card-body text-center">
+                        <div class="container">
+                            <div class="card">
+                                <div class="card-header">내 정보</div>
+                                <div class="card-body">수정 <input type="button" class="btn btn-secondary" onClick="location.href='/mypage/changeInfo'" value="수정"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+</body>
+<div th:replace="layout/footer"></div>
+</html>
