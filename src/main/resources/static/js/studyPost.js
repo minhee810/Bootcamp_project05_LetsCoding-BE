@@ -8,7 +8,6 @@ let studyPost=
 
         studyPostCommentSave:function(){
             let data ={
-
                 userId:$("#userId").val(),
                 studyPostId:$("#studyPostId").val(),
                 content:$("#studyPost-content").val()
@@ -22,7 +21,7 @@ let studyPost=
                 type:"POST",
                 url:`/api/studyPost/${data.studyPostId}/studyPostComment`,
                 data:JSON.stringify(data),
-                contentType : "application/json;charset = utf-8",
+                contentType : "application/json; charset=utf-8",
                 dataType:"json"
             }).done(function(resp){
                 alert("글쓰기가 완료되었습니다. ");

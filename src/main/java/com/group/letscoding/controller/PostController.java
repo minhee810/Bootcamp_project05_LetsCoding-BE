@@ -68,21 +68,24 @@ public class PostController {
     }
 
     // 3. 모집 글 수정 화면으로 이동,작성 글 데이터 같이 전송 -> updatePost.html
-    @PostMapping("/study/update-post")
-    public String updatePostViewSwitch (@ModelAttribute PostDto postForm, Model model) {
+    @GetMapping("/study/update-post/{recruitmentId}")
+    public String updatePostViewSwitch (@PathVariable int recruitmentId,
+                                            @ModelAttribute PostDto postForm, Model model) {
         postForm.getStart_date();
         postForm.getEnd_date();
 
         model.addAttribute("post", postForm);
         // PostDto 내부의 recruitmentId를 사용
-        model.addAttribute("recruitmentId", postForm.getRecruitmentId());
+        model.addAttribute("recruitmentId", recruitmentId);
+        System.out.println("recruitmentId = " + recruitmentId);
 
         return "post/update-post";
     }
 
     // 3-1. 수정 버튼 누르면 StudyPost update
-    @PostMapping("/study/study-recruitment-update/{recruitmentId")
+    @PostMapping("/study/study-recruitment-update/{recruitmentId}")
     public String updatePost(
+            @PathVariable int recruitmentId,
             @RequestParam String title,
             @RequestParam String topic,
             @RequestParam String skills,
@@ -95,8 +98,8 @@ public class PostController {
         Date Real_start_date = convertStringToDate(start_date);
         Date Real_end_date = convertStringToDate(end_date);
 
-        postService.updatePost(title,topic,skills,Real_start_date,
-                Real_end_date,max_num,content,principalDetails.getUser().getId());
+        postService.updatePost(title,topic, skills, Real_start_date,
+                Real_end_date, max_num, content,principalDetails.getUser().getId());
 
         return "post/post-list";
     }

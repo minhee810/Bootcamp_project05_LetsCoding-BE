@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,11 +54,14 @@ public class PostApiController {
             throw new CustomValidationApiException("유효성 검사 실패함", errorMap);
         }
 
+        System.out.println("afdsdsfafdsfds" + principalDetails.getUser().getId());
         StudyPostComment comment = postService.writeComment(
                 commentSaveRequestDto.getContent(),
                 commentSaveRequestDto.getStudyPostId(),
                 commentSaveRequestDto.getUserId(),
                 principalDetails.getUser().getId());
+
+        System.out.println("comment.getUserId : " + comment.getUser().getId());
 
         // postService.writeComment(commentSaveRequestDto);
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글 작성 성공", comment), HttpStatus.CREATED);

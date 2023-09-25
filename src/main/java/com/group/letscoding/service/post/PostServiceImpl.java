@@ -125,7 +125,7 @@ public class PostServiceImpl implements PostService {
     public void updatePost(String title, String topic, String skills,
                                 Date start_date, Date end_date, int max_num, String content,
                                 Long user_id) {
-        studyPostRepository.updatePost(user_id,title,topic,skills,
+        studyPostRepository.updatePost( user_id,title,topic,skills,
                 start_date,end_date,max_num,content);
     }
 

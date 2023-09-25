@@ -1,5 +1,7 @@
 <div th:replace="layout/header"></div>
-
+<head>
+<meta charset="UTF-8">
+</head>
 <script>
     $(document).ready(function () {
         $('#summernote').summernote({
@@ -18,6 +20,46 @@
         // 폼의 모든 입력 내용을 초기화
         document.querySelector("form").reset();
     }
+
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            placeholder: '내용을 작성하세요',
+            height: 400,
+            maxHeight: 400
+        });
+
+        var contentFromServer = [[${post.content}]];  // Thymeleaf를 사용하여 서버에서 전달된 값을 변수에 바인딩
+        $('#summernote').summernote('code', contentFromServer);  // summernote 에디터에 내용 설정
+    });
+
+    function submitEdit(){
+
+        if (document.querySelector("#title").value === '') {
+            alert('제목을 입력해주세요.');
+            return;
+        }
+        if (document.querySelector("#topic").value === '') {
+            alert('주제를 입력해주세요.');
+            return;
+        }
+        // summernote의 내용을 hidden input에 저장 (서버로 전송하기 위해)
+        $('<input>').attr({
+            type: 'hidden',
+            id: 'content',
+            name: 'content',
+            value: $('#summernote').summernote('code')
+        }).appendTo('#updateForm');
+
+        // recruitmentId 값을 가져옵니다. HTML에 제공된다고 가정합니다.
+        var recruitmentId = document.querySelector("#recruitmentId").value;
+
+            // 폼의 action을 설정합니다.
+            document.querySelector("#updateForm").action = "/study/study-recruitment-update/" + recruitmentId;
+
+        // 폼 제출
+        document.querySelector("#updateForm").submit();
+
+    }
 </script>
 <head>
     <title>스터디 모집 글 작성</title>
@@ -31,43 +73,39 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
-<style>
-    .button-group {
-        display: flex;
-        justify-content: flex-end; /* 버튼들을 왼쪽으로 정렬 */
-        gap: 10px; /* 버튼 사이의 간격 */
-    }
-</style>
 
 <body>
-
-
 <div class="container text">
 
-    <form action="#" id="updateForm" method="#" style="width: 900px;" class="mx-auto">
+    <form id="updateForm" th:object="${post}" method="post" style="width: 900px;" class="mx-auto">
 
+        <input type="hidden" name="recruitmentId" th:value="${recruitmentId}" />
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요." id="title" th:value="${post.title}">
+            <input type="text" name="title" class="form-control"  id="title"
+                   th:field="*{title}">
         </div>
 
         <div class="form-group">
             <label for="topic">주제</label>
-            <input type="text" name="topic" class="form-control" placeholder="주제를 입력해주세요." id="topic" th:value="${post.topic}">
+            <input type="text" name="topic" class="form-control" id="topic"
+                   th:field="*{topic}">
         </div>
 
         <div class="form-group">
             <label for="start_date"> 시작 예정일 </label>
-            <input type="date" id="start_date" name="start_date" class="form-control" th:value="${post.start_date}">
+            <input type="date" id="start_date" name="start_date" class="form-control"
+                   th:field="*{start_date}">
         </div>
 
         <div class="form-group">
             <label for="end_date"> 종료 예정일 </label>
-            <input type="date" id="end_date" name="end_date" class="form-control" th:value="${post.end_date}">
+            <input type="date" id="end_date" name="end_date" class="form-control"
+                   th:field="*{end_date}">
         </div>
 
-        <label for="maxNum"> 모집 인원 </label>
-        <select id="maxNum" name="maxNum" th:value="${post.max_num}">
+        <label for="max_num"> 모집 인원 </label>
+        <select id="max_num" name="max_num" th:filed="*{max_num}">
             <option value="1">1명</option>
             <option value="2">2명</option>
             <option value="3">3명</option>
@@ -82,10 +120,14 @@
 
         <hr/>
         <!--summer note-->
-        <div id="summernote" class="container"></div>
+        <div id="summernote" class="container" ></div>
         <div class="button-group">
             <button type="button" class="btn btn-light" onclick="resetForm()">지우기</button>
-            <button type="button" class="btn btn-primary" th:href="@{/study/study-recruitment-update/{recruitmentId}(id=${postResponseDto.recruitmentId})}">완료</button>
+<!--            <button type="button" class="btn btn-primary"-->
+<!--                    th:href="@{/study/study-recruitment-update/{recruitmentId}(id=${postResponseDto.recruitmentId})}">완료-->
+<!--            </button>-->
+
+            <button type ="button" class="btn btn-primary" onclick="submitEdit()">완료</button>
             <button type="button" class="btn btn-light" onclick="cancelWrite()">목록</button>
         </div>
         <br/>

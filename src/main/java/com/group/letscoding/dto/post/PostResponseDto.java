@@ -20,6 +20,8 @@ public class PostResponseDto {
     @NotBlank
     private String title;
 
+    private String studyPostComments;
+
     @NotBlank
     private String topic;
 

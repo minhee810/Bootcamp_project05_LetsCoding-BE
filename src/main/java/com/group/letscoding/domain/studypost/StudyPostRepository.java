@@ -39,6 +39,7 @@ public interface StudyPostRepository extends JpaRepository<StudyPost,Integer> {
             " p.start_date = :start_date, p.end_date = :end_date, " +
             "p.max_num = :max_num, p.content = :content WHERE p.id = :id")
     void updatePost(
+            // @Param("recruitmentId") int recruitmentId,
             @Param("id") Long id,
             @Param("title") String title,
             @Param("topic") String topic,

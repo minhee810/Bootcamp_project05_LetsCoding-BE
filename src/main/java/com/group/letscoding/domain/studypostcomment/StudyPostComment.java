@@ -31,17 +31,10 @@ public class StudyPostComment {
     @JoinColumn(name="userId")
     private User user;
 
-    @Column(nullable = false)
-    private int post_id;
-
-    @Column(nullable = false)
-    private int user_id;
-
-    @CreationTimestamp
-    private LocalDateTime createDate;
-
     @ManyToOne
     @JoinColumn(name="studyPostId")
     private StudyPost studyPost;
 
+    @CreationTimestamp
+    private LocalDateTime createDate;
 }
