@@ -8,6 +8,9 @@ import java.util.Date;
 @Data
 public class PostUpdateDto {
 
+    @NotBlank
+    private int recruitmentId;
+
     private int id;
 
     @NotBlank
@@ -18,19 +21,10 @@ public class PostUpdateDto {
 
     @NotBlank
     private String content;
+    private String skills;
     private String user_id;
-    private Date start_date;
-    private Date end_date;
-
-    public StudyPost toEntity() {
-        return StudyPost.builder()
-                .post_id(id)
-                .title(title)
-                .topic(topic)
-                .content(content)
-                .start_date(start_date)
-                .end_date(end_date)
-                .build();
-    }
+    private String start_date;
+    private String end_date;
+    private int max_num;
 
 }

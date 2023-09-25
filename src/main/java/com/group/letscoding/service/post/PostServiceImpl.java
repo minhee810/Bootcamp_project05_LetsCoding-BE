@@ -1,13 +1,16 @@
 package com.group.letscoding.service.post;
 
 
+import com.group.letscoding.domain.review.Review;
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.domain.studypost.StudyPostRepository;
 import com.group.letscoding.domain.studypostcomment.StudyPostComment;
 import com.group.letscoding.domain.studypostcomment.StudyPostCommentRepository;
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.domain.user.UserRepository;
+import com.group.letscoding.dto.post.PostDto;
 import com.group.letscoding.dto.post.PostResponseDto;
+import com.group.letscoding.dto.post.PostUpdateDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -82,7 +86,7 @@ public class PostServiceImpl implements PostService {
     public Page<StudyPost> findByTitleContaining(String keyword, Pageable pageable) {
         logger.info("START");
         Page<StudyPost> postList;
-       postList = studyPostRepository.findByTitleContaining(keyword,pageable);
+        postList = studyPostRepository.findByTitleContaining(keyword, pageable);
         logger.info("END");
         return postList;
     }
@@ -91,7 +95,7 @@ public class PostServiceImpl implements PostService {
     public Page<StudyPost> findBySkillContaining(String keyword, Pageable pageable) {
 
         Page<StudyPost> postList;
-        postList = studyPostRepository.findBySkillContaining(keyword,pageable);
+        postList = studyPostRepository.findBySkillContaining(keyword, pageable);
 
         return postList;
     }
@@ -101,9 +105,9 @@ public class PostServiceImpl implements PostService {
     public StudyPost savePost(String title, String topic, Date startDate,
                               String skills, Date endDate,
                               int max_num, String content,
-                              Long userId){
+                              Long userId) {
 
-        User userEntity = userRepository.findById(userId).orElseThrow(()->{
+        User userEntity = userRepository.findById(userId).orElseThrow(() -> {
             return new RuntimeException("유저 아이디를 찾을 수 없습니다.");
         });
 
@@ -123,10 +127,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(String title, String topic, String skills,
-                                Date start_date, Date end_date, int max_num, String content,
-                                Long user_id) {
-        studyPostRepository.updatePost( user_id,title,topic,skills,
-                start_date,end_date,max_num,content);
+                           Date start_date, Date end_date, int max_num, String content,
+                           Long user_id) {
+        studyPostRepository.updatePost(user_id, title, topic, skills,
+                start_date, end_date, max_num, content);
     }
 
     @Override
@@ -139,8 +143,8 @@ public class PostServiceImpl implements PostService {
         System.out.println("#### PostServiceImpl getPostById() #### : " + recruitmentId);
 
 
-        StudyPost postEntity = studyPostRepository.findById(recruitmentId).orElseThrow(()->{
-            return new EntityNotFoundException("해당 글이 존재하지 않습니다.  recruitmentId : "+ recruitmentId);
+        StudyPost postEntity = studyPostRepository.findById(recruitmentId).orElseThrow(() -> {
+            return new EntityNotFoundException("해당 글이 존재하지 않습니다.  recruitmentId : " + recruitmentId);
         });
 
         // 게시글 Entity를 DTO로 변환
@@ -176,7 +180,51 @@ public class PostServiceImpl implements PostService {
         comment.setStudyPost(studyPost);
 
         return studyPostCommentRepository.save(comment);
-
     }
+
+    //수정
+    @Override
+    public PostUpdateDto editPost(PostUpdateDto postUpdateDto) throws Exception {
+        try {
+            int recruitment_id = postUpdateDto.getRecruitmentId();
+            StudyPost studyPost = studyPostRepository.findById(recruitment_id).orElse(null);
+
+            if (studyPost == null) {
+                throw new NullPointerException("해당 게시글이 존재하지 않습니다.");
+            }
+
+            // 리뷰의 제목과 내용을 업데이트합니다.
+//            studyPost.setUser_id(user_id);
+            studyPost.setTopic(postUpdateDto.getTopic());
+            studyPost.setTitle(postUpdateDto.getTitle());
+            studyPost.setContent(postUpdateDto.getContent());
+            studyPost.setSkills(postUpdateDto.getSkills());
+
+            studyPost.setStart_date(convertStringToDate(postUpdateDto.getStart_date()));
+            studyPost.setEnd_date(convertStringToDate(postUpdateDto.getEnd_date()));
+            studyPost.setMax_num(postUpdateDto.getMax_num());
+            studyPost.setPost_id(postUpdateDto.getRecruitmentId());
+
+            // 리뷰 저장
+            studyPostRepository.save(studyPost);
+
+            // 수정된 리뷰 정보 반환
+            return postUpdateDto;
+        } catch (Exception e) {
+            e.printStackTrace(); // 스택 트레이스 출력
+            throw new Exception("리뷰 수정 중 오류가 발생했습니다.");
+        }
+    }
+
+    public Date convertStringToDate(String dateStr) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.parse(dateStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

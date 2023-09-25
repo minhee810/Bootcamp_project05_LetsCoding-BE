@@ -1,7 +1,10 @@
 package com.group.letscoding.service.post;
 
 import com.group.letscoding.domain.studypost.StudyPost;
+import com.group.letscoding.domain.user.User;
+import com.group.letscoding.dto.post.PostDto;
 import com.group.letscoding.dto.post.PostResponseDto;
+import com.group.letscoding.dto.post.PostUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ interface PostService {
 
     public Page<StudyPost> getRecruitBoardPage(int page, int size);
 
+    public PostUpdateDto editPost(PostUpdateDto postUpdateDto) throws Exception;
     //검색
     public Page<StudyPost> findByTitleContaining(String keyword, Pageable pageable);
     public Page<StudyPost> findBySkillContaining(String keyword, Pageable pageable);

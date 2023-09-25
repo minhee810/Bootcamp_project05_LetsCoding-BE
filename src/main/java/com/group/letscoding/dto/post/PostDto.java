@@ -11,7 +11,7 @@ import java.util.Date;
 public class PostDto {
 
     @NotBlank
-    private Long recruitmentId;
+    private int recruitmentId;
 
     @NotBlank
     private String title;

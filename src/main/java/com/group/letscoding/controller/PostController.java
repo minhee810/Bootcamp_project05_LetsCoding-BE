@@ -185,18 +185,4 @@ public class PostController {
     }
 
 
-    //convert StudyPost -> PostDTO
-//    private Page<PostDTO> getPageDTOs(Page<PostDTO> postDTOList, Page<StudyPost> postList) {
-//        for(StudyPost post : postList){
-//            PostDTO postDTO = new PostDTO();
-//            postDTO.setPost_id(post.getPost_id());
-//            postDTO.setTitle(post.getTitle());
-//            postDTO.setSkill(post.getSkill());
-//
-//            postDTOList.add(postDTO);
-//        }
-//
-//        return postDTOList;
-//    }
-
 }

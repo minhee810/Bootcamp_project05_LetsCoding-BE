@@ -52,12 +52,12 @@
         xhr.send(data);
     };
 
-    function edit() {
+    function editPost() {
         // 수정 버튼을 "수정완료"로 변경
-        var editButton = document.getElementById("editButton");
+        let editButton = document.getElementById("editButton");
         editButton.style.display = "none"; // "수정" 버튼을 숨깁니다.
 
-        var submitButton = document.getElementById("submitButton");
+        let submitButton = document.getElementById("submitButton");
         submitButton.style.display = "block"; // "수정완료" 버튼을 보이게 합니다.
 
         // 제목과 내용을 수정 가능하게
@@ -75,22 +75,23 @@
         window.history.back();
     }
 
-    // // 바로 AJAX 요청 시작
-    let recruitmentId = $("#someElement").data("recruitmentId");
-    document.getElementById('recruitmentId').value = recruitmentId;
-    console.log(recruitmentId);
-
     function submitEdit() {
-        var id = document.getElementById("id").value;
-        var review_id = document.getElementById("review_id").value;
 
+        let recruitmentId = document.getElementById("recruitmentId").value;
+        console.log(recruitmentId);
         // 수정된 내용 가져오기
-        var title = document.getElementById("title").value;
-        var content = document.getElementById("content").value;
+        let title = document.getElementById("title").value;
+        let topic = document.getElementById("topic").value;
+        let content = document.getElementById("content").value;
+        let skills = document.getElementById("skills").value;
+        let start_date = document.getElementById("start_date").value;
+        let end_date = document.getElementById("end_date").value;
+        let max_num = document.getElementById("max_num").value;
+
 
         // AJAX를 사용하여 서버에 수정된 내용 전송
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/review/" + id + "/edit/" + review_id, true);
+        xhr.open("POST", "/post/edit/" + recruitmentId, true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
         xhr.onload = function () {
@@ -105,10 +106,14 @@
         };
 
         var data = JSON.stringify({
-            id: id,
-            review_id: review_id,
+            recruitmentId: recruitmentId,
             title: title,
-            content: content
+            content: content,
+            topic:topic,
+            skills:skills,
+            start_date:start_date,
+            end_date:end_date,
+            max_num:max_num
         });
 
         xhr.send(data);
@@ -147,51 +152,54 @@
     }
 </style>
 <div class="container text">
-    <form th:action="@{/study/update-post}" th:object="${post}" method="post">
+<!--    <form th:action="@{/study/update-post}" th:object="${post}" method="post">-->
+    <form th:object="${post}" method="post">
 
-        <input type="hidden" name="recruitmentId" th:value="${recruitmentId}"/>
+
+        <!--  add user_id -->
+        <input type="hidden" id="user_id" th:value="${user_id}"/>
+        <input type="hidden" id ="recruitmentId" name="recruitmentId" th:value="${recruitmentId}"/>
 
         <div id="detailContent" class="container">
             <div>
-                <label for="formTitle">제목 </label>
-                <input type="text" name="title" th:value="${post.title}" id="formTitle" readonly/>
+                <label for="title">제목 </label>
+                <input type="text" name="title" th:value="${post.title}" id="title" readonly/>
             </div>
             <div>
-                <label for="formTopic">주제 </label>
-                <input type="text" name="topic" th:value="${post.topic}" id="formTopic" readonly/>
+                <label for="topic">주제 </label>
+                <input type="text" name="topic" th:value="${post.topic}" id="topic" readonly/>
             </div>
             <div>
-                <label for="formSkills">기술 스택</label>
-                <input type="text" name="skills" th:value="${post.skills}" id="formSkills" readonly/>
+                <label for="skills">기술 스택</label>
+                <input type="text" name="skills" th:value="${post.skills}" id="skills" readonly/>
             </div>
 
             <div class="form-group">
-                <label for="formStartDate">시작일</label>
-                <input type="text" name="start_date" th:value="${post.start_date}" id="formStartDate"
+                <label for="start_date">시작일</label>
+                <input type="text" name="start_date" th:value="${post.start_date}" id="start_date"
                        class="form-control" readonly/>
             </div>
             <div>
-                <label for="formEndDate">종료일</label>
-                <input type="text" name="end_date" th:value="${post.end_date}" id="formEndDate" class="form-control"
+                <label for="end_date">종료일</label>
+                <input type="text" name="end_date" th:value="${post.end_date}" id="end_date" class="form-control"
                        readonly/>
             </div>
 
             <div>
-                <label for="formMaxNum">모집 인원</label>
-                <input type="text" name="max_num" th:value="${post.max_num}" id="formMaxNum" readonly/>
+                <label for="max_num">모집 인원</label>
+                <input type="text" name="max_num" th:value="${post.max_num}" id="max_num" readonly/>
             </div>
             <div>
-                <label for="formContent">모집 내용 </label>
-                <input type="text" name="content" th:value="${post.content}" id="formContent" readonly/>
+                <label for="content">모집 내용 </label>
+                <input type="text" name="content" th:value="${post.content}" id="content" readonly/>
             </div>
 
             <div class="button-group">
                 <button type="button" class="btn btn-light" onclick="goBack()">목록</button>
                 <button type="button" class="btn btn-light" onclick="goBack()">뒤로 가기</button>
-                <button type="button" id="editButton" class="btn btn-light" onclick="edit()">수정</button>
+                <button type="button" id="editButton" class="btn btn-light" onclick="editPost()">수정</button>
                 <button type="button" id="submitButton" class="btn btn-light" style="display:none;"
-                        onclick="submitEdit()">수정완료
-                </button>
+                        onclick="submitEdit()">수정완료</button>
                 <!--            <a th:href="@{'/study/update-post/' + ${recruitmentId}}" class="btn btn-warning">수정</a>-->
 
             </div>
@@ -226,7 +234,7 @@
             class="list-group-item d-flex justify-content-between">
             <div><span th:text="${comment.content}"></span></div>
             <div class="d-flex">
-                <div class="font-italic" th:text="${comment.user.username}"> 작성자</div>
+                <div class="font-italic" th:text="${comment.user.username}">작성자</div>
                 <button class="badge">삭제</button>
             </div>
         </li>

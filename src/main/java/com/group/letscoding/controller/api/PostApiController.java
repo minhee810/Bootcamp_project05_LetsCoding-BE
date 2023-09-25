@@ -3,9 +3,13 @@ package com.group.letscoding.controller.api;
 
 import com.group.letscoding.config.auth.PrincipalDetails;
 import com.group.letscoding.controller.AuthController;
+import com.group.letscoding.controller.PostController;
 import com.group.letscoding.domain.studypostcomment.StudyPostComment;
 import com.group.letscoding.dto.CMRespDto;
 import com.group.letscoding.dto.post.CommentSaveRequestDto;
+import com.group.letscoding.dto.post.PostDto;
+import com.group.letscoding.dto.post.PostUpdateDto;
+import com.group.letscoding.dto.review.ReviewWriteDto;
 import com.group.letscoding.handler.ex.CustomValidationApiException;
 import com.group.letscoding.service.post.PostServiceImpl;
 import org.slf4j.Logger;
@@ -16,13 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +69,26 @@ public class PostApiController {
         // postService.writeComment(commentSaveRequestDto);
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글 작성 성공", comment), HttpStatus.CREATED);
     }
+    @PostMapping("/post/edit/{recruitment_id}")
+    public ResponseEntity<String> editReview(@PathVariable int recruitment_id,
+                                             @RequestBody PostUpdateDto postUpdateDto) {
+        System.out.println("@@@@@recruitment_id = " + recruitment_id);
+        System.out.println("@2@@@postUpdateDto = " + postUpdateDto);
 
+
+        try {
+            postUpdateDto.setRecruitmentId(recruitment_id);
+
+            Date startDate = convertStringToDate(postUpdateDto.getStart_date());
+            Date endDate = convertStringToDate(postUpdateDto.getEnd_date());
+
+//            postService.editPost(postDto, principalDetails.getUser());
+            postService.editPost(postUpdateDto);
+            return new ResponseEntity<>("수정이 완료되었습니다.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("수정 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 //    @PostMapping("/api/study/create-post")  // 사용자 정보 받아옴.
 //    public ResponseEntity<?> createPost(@RequestBody PostDto postDto,
@@ -108,6 +130,18 @@ public class PostApiController {
 //            return new ResponseEntity<>(result2, HttpStatus.NOT_FOUND);
 //        }
 //    }
+
+    public Date convertStringToDate(String dateStr) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            return formatter.parse(dateStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 
 }
 

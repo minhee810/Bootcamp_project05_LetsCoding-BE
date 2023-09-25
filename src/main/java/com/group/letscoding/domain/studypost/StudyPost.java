@@ -36,10 +36,8 @@ public class StudyPost {
     @Column(nullable = false)
     private int max_num;
 
-    @Column
     private Date start_date;
 
-    @Column
     private Date end_date;
 
     @Column(nullable = false)
