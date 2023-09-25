@@ -1,11 +1,21 @@
 package com.group.letscoding.controller.api;
 
 
+import com.group.letscoding.config.auth.PrincipalDetails;
 import com.group.letscoding.controller.AuthController;
+import com.group.letscoding.domain.studypost.StudyPost;
+import com.group.letscoding.domain.studypostcomment.PostComment;
+import com.group.letscoding.dto.CMRespDto;
+import com.group.letscoding.dto.post.CommentRequest;
 import com.group.letscoding.service.post.PostServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,7 +48,7 @@ public class PostApiController {
 
     /**
      * 스터디 모집 글 상세 페이지 - kang
-     * @param recruitmentId
+     * @param
      * @return
      */
     /*
@@ -63,6 +73,18 @@ public class PostApiController {
 //        }
 //    }
 
+    @PostMapping("/api/post/comment")
+    public ResponseEntity<?> saveComment(@RequestBody CommentRequest commentRequest,
+                                         @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        PostComment postComment = new PostComment();
+        StudyPost studyPost = postService.getPost(commentRequest.getStudyPostId());
+        postComment.setStudyPost(studyPost);
+        postComment.setUser(principalDetails.getUser());
+        postComment.setContent(commentRequest.getContent());
+        System.out.println(postComment.toString());
+        postService.saveComment(postComment);
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 등록 성공", postComment), HttpStatus.CREATED);
+    }
 }
 
 

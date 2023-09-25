@@ -1,6 +1,7 @@
 package com.group.letscoding.service.post;
 
 import com.group.letscoding.domain.studypost.StudyPost;
+import com.group.letscoding.domain.studypostcomment.PostComment;
 import com.group.letscoding.dto.post.PostResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +30,7 @@ interface PostService {
 
     PostResponseDto getPostById(int recruitmentId);
 
+    PostComment saveComment(PostComment postComment);
 
+    public List<PostComment> getComments(int recruitmentId);
 }

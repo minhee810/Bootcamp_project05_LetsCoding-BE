@@ -3,9 +3,12 @@ package com.group.letscoding.service.post;
 
 import com.group.letscoding.domain.studypost.StudyPost;
 import com.group.letscoding.domain.studypost.StudyPostRepository;
+import com.group.letscoding.domain.studypostcomment.PostComment;
+import com.group.letscoding.domain.studypostcomment.PostCommentRepository;
 import com.group.letscoding.domain.user.User;
 import com.group.letscoding.domain.user.UserRepository;
 import com.group.letscoding.dto.post.PostResponseDto;
+import com.group.letscoding.handler.ex.CustomApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Date;
@@ -24,14 +28,19 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private final StudyPostRepository studyPostRepository;
 
+    @Autowired
+    private final PostCommentRepository postCommentRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Autowired
     private final UserRepository userRepository;
 
-    public PostServiceImpl(StudyPostRepository studyPostRepository, UserRepository userRepository) {
+    public PostServiceImpl(StudyPostRepository studyPostRepository, UserRepository userRepository,
+                           PostCommentRepository postCommentRepository) {
         this.studyPostRepository = studyPostRepository;
         this.userRepository = userRepository;
+        this.postCommentRepository = postCommentRepository;
     }
 
     @Override
@@ -147,10 +156,27 @@ public class PostServiceImpl implements PostService {
         return postResponseDto;
     }
 
+    public StudyPost getPost(int postId) {
+        StudyPost studyPost = studyPostRepository.findById(postId).orElseThrow(() -> {
+            throw new CustomApiException("모집글을 찾을 수 없습니다.");
+        });
+        return studyPost;
+    }
+
+    @Override
+    @Transactional
+    public PostComment saveComment(PostComment postComment) {
+        return postCommentRepository.save(postComment);
+    }
 
 
     @Override
     public PostResponseDto deletePost(int id) throws Exception {
         return null;
+    }
+
+    @Override
+    public List<PostComment> getComments(int recruitmentId) {
+        return postCommentRepository.findByRecruitmentId(recruitmentId);
     }
 }
