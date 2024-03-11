@@ -4,6 +4,7 @@
 [![Java 11](https://img.shields.io/badge/Java-11-red?style=flat-square&logo=Java&logoColor=white)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 [![Spring](https://img.shields.io/badge/-Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white)](https://spring.io/)
 [![Spring Boot](https://img.shields.io/badge/-Spring_Boot-6DB33F?style=flat-square&logo=SpringBoot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Ajax](https://img.shields.io/badge/-Ajax-0080FF?style=flat-square&logo=Ajax&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX)
 [![JSP](https://img.shields.io/badge/-JSP-007396?style=flat-square&logo=Java&logoColor=white)](https://www.oracle.com/technical-resources/articles/java/servletjsp.html)
 [![Notion](https://img.shields.io/badge/-Notion-000000?style=flat-square&logo=Notion&logoColor=white)](https://www.notion.so/)
 [![Kakao Oven](https://img.shields.io/badge/-Kakao_Oven-FFCD00?style=flat-square&logo=Kakao&logoColor=black)](https://ovenapp.io/)
